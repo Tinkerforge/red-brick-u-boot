@@ -126,6 +126,10 @@ static int gpio_init(void)
 	sunxi_gpio_set_cfgpin(SUNXI_GPL(2), SUN8I_GPL_R_UART);
 	sunxi_gpio_set_cfgpin(SUNXI_GPL(3), SUN8I_GPL_R_UART);
 	sunxi_gpio_set_pull(SUNXI_GPL(3), SUNXI_GPIO_PULL_UP);
+#elif defined(RED_BRICK)
+	sunxi_gpio_set_cfgpin(SUNXI_GPC(16), SUNXI_UART3_PC_TX_RX);
+	sunxi_gpio_set_cfgpin(SUNXI_GPC(17), SUNXI_UART3_PC_TX_RX);
+	sunxi_gpio_set_pull(SUNXI_GPC(17), SUNXI_GPIO_PULL_UP);
 #else
 #error Unsupported console port number. Please fix pin mux settings in board.c
 #endif

@@ -139,6 +139,10 @@ enum sunxi_gpio_number {
 #define SUNXI_GPAXP0(_nr)	(SUNXI_GPIO_AXP0_START + (_nr))
 
 /* GPIO pin function config */
+#ifdef RED_BRICK
+#define SUNXI_UART3_PC_TX_RX 4
+#endif
+
 #define SUNXI_GPIO_INPUT	0
 #define SUNXI_GPIO_OUTPUT	1
 #define SUNXI_GPIO_DISABLE	7
