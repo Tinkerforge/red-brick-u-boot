@@ -67,12 +67,18 @@
 	leds {
 		compatible = "gpio-leds";
 		pinctrl-names = "default";
-		pinctrl-0 = <&led_pins_olinuxino>;
+		pinctrl-0 = <&led_pins_red_brick>;
 
-		green {
-			label = "a10s-olinuxino-micro:green:usr";
-			gpios = <&pio 4 3 GPIO_ACTIVE_HIGH>;
-			default-state = "on";
+		running {
+			label = "red-brick:led:running";
+			gpios = <&pio 2 5 GPIO_ACTIVE_LOW>;
+			default-state = "off";
+		};
+
+		error {
+			label = "red-brick:led:error";
+			gpios = <&pio 2 6 GPIO_ACTIVE_LOW>;
+			default-state = "off";
 		};
 	};
 };
@@ -215,8 +221,8 @@
 		allwinner,pull = <SUN4I_PINCTRL_PULL_UP>;
 	};
 
-	led_pins_olinuxino: led_pins@0 {
-		allwinner,pins = "PE3";
+	led_pins_red_brick: led_pins@0 {
+		allwinner,pins = "PC5", "PC6";
 		allwinner,function = "gpio_out";
 		allwinner,drive = <SUN4I_PINCTRL_20_MA>;
 		allwinner,pull = <SUN4I_PINCTRL_NO_PULL>;

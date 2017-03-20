@@ -34,6 +34,30 @@
 #include <net.h>
 #include <sy8106a.h>
 
+#ifdef RED_BRICK
+#include <led.h>
+
+static void setup_red_brick_leds(void)
+{
+	int r;
+	struct udevice *red_brick_led_error;
+
+	r = led_get_by_label("red-brick:led:error", &red_brick_led_error);
+
+	if(r) {
+		printf("\nRED-Brick::ERR::Specified error LED not found\n");
+
+		return;
+	}
+
+	r = led_set_on(red_brick_led_error, 1);
+
+	if (r) {
+		printf("\nRED-Brick::ERR::Failed to set error LED state\n");
+	}
+}
+#endif
+
 #if defined CONFIG_VIDEO_LCD_PANEL_I2C && !(defined CONFIG_SPL_BUILD)
 /* So that we can use pin names in Kconfig and sunxi_name_to_gpio() */
 int soft_i2c_gpio_sda;
@@ -124,6 +148,10 @@ int board_init(void)
 #ifdef CONFIG_MACPWR
 	gpio_request(CONFIG_MACPWR, "macpwr");
 	gpio_direction_output(CONFIG_MACPWR, 1);
+#endif
+
+#ifdef RED_BRICK
+	setup_red_brick_leds();
 #endif
 
 	/* Uses dm gpio code so do this here and not in i2c_init_board() */
