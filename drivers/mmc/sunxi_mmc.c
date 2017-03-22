@@ -437,10 +437,6 @@ out:
 
 static int sunxi_mmc_getcd(struct mmc *mmc)
 {
-	#ifdef RED_BRICK
-		return 1;
-	#endif
-
 	struct sunxi_mmc_host *mmchost = mmc->priv;
 	int cd_pin;
 
