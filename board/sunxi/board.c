@@ -39,20 +39,25 @@
 
 static void setup_red_brick_leds(void)
 {
-	int r;
-	struct udevice *red_brick_led_error;
+	int r_error, r_running;
+	struct udevice *red_brick_led_error, *red_brick_led_running;
 
-	r = led_get_by_label("red-brick:led:error", &red_brick_led_error);
+	r_error = led_get_by_label("red-brick:led:error", &red_brick_led_error);
+	r_running = led_get_by_label("red-brick:led:running", &red_brick_led_running);
 
-	if(r) {
+	if(r_error || r_running) {
 		printf("\nRED-Brick::ERR::Specified error LED not found\n");
 
 		return;
 	}
 
-	r = led_set_on(red_brick_led_error, 1);
+	// Turn off the error LED.
+	r_error = led_set_on(red_brick_led_error, 1);
 
-	if (r) {
+	// Turn on the running LED.
+	r_running = led_set_on(red_brick_led_running, 0);
+
+	if(r_error || r_running) {
 		printf("\nRED-Brick::ERR::Failed to set error LED state\n");
 	}
 }
