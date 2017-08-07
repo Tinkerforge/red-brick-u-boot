@@ -7,6 +7,7 @@ config MX6
 	select ARM_ERRATA_751472 if !MX6UL
 	select ARM_ERRATA_761320 if !MX6UL
 	select ARM_ERRATA_794072 if !MX6UL
+	imply CMD_FUSE
 
 config MX6D
 	bool
@@ -43,6 +44,16 @@ config MX6UL_LITESOM
 	bool
 	select MX6UL
 	select DM
+	select DM_THERMAL
+	select SUPPORT_SPL
+
+config MX6UL_OPOS6UL
+	bool
+	select MX6UL
+	select BOARD_LATE_INIT
+	select DM
+	select DM_GPIO
+	select DM_MMC
 	select DM_THERMAL
 	select SUPPORT_SPL
 
@@ -145,13 +156,28 @@ config TARGET_MX6CUBOXI
 	select BOARD_LATE_INIT
 	select SUPPORT_SPL
 
+config TARGET_MX6LOGICPD
+	bool "Logic PD i.MX6 SOM"
+	select BOARD_EARLY_INIT_F
+	select BOARD_LATE_INIT
+	select DM
+	select DM_ETH
+	select DM_GPIO
+	select DM_I2C
+	select DM_MMC
+	select DM_PMIC
+	select DM_REGULATOR
+	select OF_CONTROL
+
 config TARGET_MX6QARM2
 	bool "mx6qarm2"
 
 config TARGET_MX6Q_ICORE
 	bool "Support Engicam i.Core"
+	select BOARD_LATE_INIT
 	select MX6QDL
 	select OF_CONTROL
+	select SPL_OF_LIBFDT
 	select DM
 	select DM_ETH
 	select DM_GPIO
@@ -159,11 +185,14 @@ config TARGET_MX6Q_ICORE
 	select DM_MMC
 	select DM_THERMAL
 	select SUPPORT_SPL
+	select SPL_LOAD_FIT
 
 config TARGET_MX6Q_ICORE_RQS
 	bool "Support Engicam i.Core RQS"
+	select BOARD_LATE_INIT
 	select MX6QDL
 	select OF_CONTROL
+	select SPL_OF_LIBFDT
 	select DM
 	select DM_ETH
 	select DM_GPIO
@@ -171,6 +200,7 @@ config TARGET_MX6Q_ICORE_RQS
 	select DM_MMC
 	select DM_THERMAL
 	select SUPPORT_SPL
+	select SPL_LOAD_FIT
 
 config TARGET_MX6QSABREAUTO
 	bool "mx6qsabreauto"
@@ -232,6 +262,19 @@ config TARGET_MX6UL_14X14_EVK
 
 config TARGET_MX6UL_GEAM
 	bool "Support Engicam GEAM6UL"
+	select BOARD_LATE_INIT
+	select MX6UL
+	select OF_CONTROL
+	select DM
+	select DM_ETH
+	select DM_GPIO
+	select DM_I2C
+	select DM_MMC
+	select DM_THERMAL
+	select SUPPORT_SPL
+config TARGET_MX6UL_ISIOT
+	bool "Support Engicam Is.IoT MX6UL"
+	select BOARD_LATE_INIT
 	select MX6UL
 	select OF_CONTROL
 	select DM
@@ -251,6 +294,10 @@ config TARGET_MX6ULL_14X14_EVK
 
 config TARGET_NITROGEN6X
 	bool "nitrogen6x"
+
+config TARGET_OPOS6ULDEV
+	bool "Armadeus OPOS6ULDev board"
+	select MX6UL_OPOS6UL
 
 config TARGET_OT1200
 	bool "Bachmann OT1200"
@@ -350,6 +397,7 @@ config SYS_SOC
 source "board/ge/bx50v3/Kconfig"
 source "board/advantech/dms-ba16/Kconfig"
 source "board/aristainetos/Kconfig"
+source "board/armadeus/opos6uldev/Kconfig"
 source "board/bachmann/ot1200/Kconfig"
 source "board/barco/platinum/Kconfig"
 source "board/barco/titanium/Kconfig"
@@ -362,6 +410,7 @@ source "board/embest/mx6boards/Kconfig"
 source "board/engicam/geam6ul/Kconfig"
 source "board/engicam/icorem6/Kconfig"
 source "board/engicam/icorem6_rqs/Kconfig"
+source "board/engicam/isiotmx6ul/Kconfig"
 source "board/freescale/mx6qarm2/Kconfig"
 source "board/freescale/mx6qsabreauto/Kconfig"
 source "board/freescale/mx6sabresd/Kconfig"
@@ -377,6 +426,7 @@ source "board/gateworks/gw_ventana/Kconfig"
 source "board/kosagi/novena/Kconfig"
 source "board/samtec/vining_2000/Kconfig"
 source "board/liebherr/mccmon6/Kconfig"
+source "board/logicpd/imx6/Kconfig"
 source "board/seco/Kconfig"
 source "board/solidrun/mx6cuboxi/Kconfig"
 source "board/technexion/pico-imx6ul/Kconfig"

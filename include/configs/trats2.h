@@ -35,7 +35,6 @@
 
 /* select serial console configuration */
 #define CONFIG_SERIAL2
-#define CONFIG_BAUDRATE			115200
 
 /* Console configuration */
 
@@ -170,7 +169,6 @@
 
 /* Download menu - definitions for check keys */
 #ifndef __ASSEMBLY__
-#include <power/max77686_pmic.h>
 
 #define KEY_PWR_PMIC_NAME		"MAX77686_PMIC"
 #define KEY_PWR_STATUS_REG		MAX77686_REG_PMIC_STATUS1
@@ -184,7 +182,6 @@
 
 /* LCD console */
 #define LCD_BPP                 LCD_COLOR16
-#define CONFIG_SYS_WHITE_ON_BLACK
 
 /* LCD */
 #define CONFIG_BMP_16BPP

@@ -148,7 +148,7 @@ int board_init(void)
 		debug("Memory controller init failed: %d\n", err);
 #  endif
 # endif /* CONFIG_TEGRA_PMU */
-#ifdef CONFIG_AS3722_POWER
+#ifdef CONFIG_PMIC_AS3722
 	err = as3722_init(NULL);
 	if (err && err != -ENODEV)
 		return err;
@@ -191,6 +191,9 @@ void gpio_early_init(void) __attribute__((weak, alias("__gpio_early_init")));
 
 int board_early_init_f(void)
 {
+	if (!clock_early_init_done())
+		clock_early_init();
+
 #if defined(CONFIG_TEGRA_DISCONNECT_UDC_ON_BOOT)
 #define USBCMD_FS2 (1 << 15)
 	{
@@ -315,7 +318,7 @@ static ulong usable_ram_size_below_4g(void)
  * start address of that bank cannot be represented in the 32-bit .size
  * field.
  */
-void dram_init_banksize(void)
+int dram_init_banksize(void)
 {
 	gd->bd->bi_dram[0].start = CONFIG_SYS_SDRAM_BASE;
 	gd->bd->bi_dram[0].size = usable_ram_size_below_4g();
@@ -334,6 +337,8 @@ void dram_init_banksize(void)
 		gd->bd->bi_dram[1].start = 0;
 		gd->bd->bi_dram[1].size = 0;
 	}
+
+	return 0;
 }
 
 /*

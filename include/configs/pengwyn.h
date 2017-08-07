@@ -104,11 +104,9 @@
 
 /* NS16550 Configuration: primary UART via FTDI */
 #define CONFIG_SYS_NS16550_COM1		0x44e09000
-#define CONFIG_BAUDRATE			115200
 
 /* I2C Configuration */
 #define	CONFIG_SYS_I2C_SPEED		100000
-#define CONFIG_CMD_EEPROM
 #define CONFIG_ENV_EEPROM_IS_ON_I2C
 #define CONFIG_SYS_I2C_EEPROM_ADDR	0x50
 #define CONFIG_SYS_I2C_EEPROM_ADDR_LEN	2
@@ -155,8 +153,6 @@
 #define CONFIG_SYS_NAND_U_BOOT_OFFS	0x200000
 
 #define CONFIG_CMD_MTDPARTS
-
-#define CONFIG_CMD_DIAG /* monitor functions : Diagnostics */
 
 #define MTDIDS_DEFAULT			"nand0=omap2-nand.0"
 /* Size must be a multiple of Nand erase size (524288 b) */
@@ -206,6 +202,6 @@
 
 /* CPSW support */
 
-#define CONFIG_SPL_LDSCRIPT		"arch/arm/mach-omap2/am33xx/u-boot-spl.lds"
+#define CONFIG_SPL_LDSCRIPT		"arch/arm/mach-omap2/u-boot-spl.lds"
 
 #endif	/* ! __CONFIG_PENGWYN_H */

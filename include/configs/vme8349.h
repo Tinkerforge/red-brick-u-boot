@@ -342,7 +342,6 @@
 /*
  * Command line configuration.
  */
-#define CONFIG_CMD_DATE
 #define CONFIG_SYS_RTC_BUS_NUM  0x01
 #define CONFIG_SYS_I2C_RTC_ADDR	0x32
 #define CONFIG_RTC_RX8025
@@ -350,10 +349,6 @@
 
 #if defined(CONFIG_PCI)
     #define CONFIG_CMD_PCI
-#endif
-
-#if defined(CONFIG_SYS_RAMBOOT)
-    #undef CONFIG_CMD_ENV
 #endif
 
 /* Pass Ethernet MAC to VxWorks */
@@ -538,8 +533,6 @@
 #define CONFIG_LOADADDR		800000	/* def location for tftp and bootm */
 
 #undef  CONFIG_BOOTARGS			/* boot command will set bootargs */
-
-#define CONFIG_BAUDRATE	 9600
 
 #define	CONFIG_EXTRA_ENV_SETTINGS					\
 	"netdev=eth0\0"							\

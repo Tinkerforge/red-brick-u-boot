@@ -18,7 +18,6 @@
  * Command line configuration.
  */
 #define CONFIG_CMD_SDRAM
-#define CONFIG_CMD_JFFS2
 
 #define CONFIG_BOOTARGS         "console=ttySC2,115200 root=1f01"
 #define CONFIG_ENV_OVERWRITE    1
@@ -28,7 +27,6 @@
 
 /* SCIF */
 #define CONFIG_SCIF_CONSOLE        1
-#define CONFIG_BAUDRATE         115200
 #define CONFIG_CONS_SCIF2		1
 
 #define CONFIG_SYS_TEXT_BASE	0x8FFC0000

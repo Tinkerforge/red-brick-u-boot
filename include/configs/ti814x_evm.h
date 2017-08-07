@@ -16,10 +16,6 @@
 #ifndef __CONFIG_TI814X_EVM_H
 #define __CONFIG_TI814X_EVM_H
 
-#define CONFIG_TI81XX
-#define CONFIG_TI814X
-#define CONFIG_OMAP
-
 #include <asm/arch/omap.h>
 
 #define CONFIG_ENV_SIZE			(128 << 10)	/* 128 KiB */
@@ -110,8 +106,6 @@
 
 #define CONFIG_SYS_LOAD_ADDR		0x81000000	/* Default */
 
-#define CONFIG_OMAP_GPIO
-
 /**
  * Physical Memory Map
  */
@@ -134,8 +128,6 @@
 #define CONFIG_SYS_NS16550_REG_SIZE	(-4)
 #define CONFIG_SYS_NS16550_CLK		(48000000)
 #define CONFIG_SYS_NS16550_COM1		0x48020000	/* Base EVM has UART0 */
-
-#define CONFIG_BAUDRATE			115200
 
 /* CPU */
 #define CONFIG_ARCH_CPU_INIT
@@ -161,8 +153,6 @@
 #define CONFIG_SYS_SPI_U_BOOT_SIZE	0x40000
 #define CONFIG_SPL_LDSCRIPT		"arch/arm/mach-omap2/u-boot-spl.lds"
 
-#define CONFIG_SPL_BOARD_INIT
-
 /*
  * 1MB into the SDRAM to allow for SPL's bss at the beginning of SDRAM
  * 64 bytes before this address should be set aside for u-boot.img's
@@ -180,9 +170,6 @@
 #ifndef CONFIG_SPL_BUILD
 #define CONFIG_SKIP_LOWLEVEL_INIT
 #endif
-
-/* Unsupported features */
-#undef CONFIG_USE_IRQ
 
 /* Ethernet */
 #define CONFIG_DRIVER_TI_CPSW

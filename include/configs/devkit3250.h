@@ -41,7 +41,6 @@
  * Serial Driver
  */
 #define CONFIG_SYS_LPC32XX_UART		5   /* UART5 */
-#define CONFIG_BAUDRATE			115200
 
 /*
  * DMA
@@ -111,7 +110,6 @@
 #define CONFIG_SYS_NAND_PAGE_SIZE		NAND_LARGE_BLOCK_PAGE_SIZE
 #define CONFIG_SYS_NAND_USE_FLASH_BBT
 
-#define CONFIG_CMD_JFFS2
 #define CONFIG_CMD_NAND
 
 /*
@@ -182,7 +180,6 @@
 
 /* SPL will use SRAM as stack */
 #define CONFIG_SPL_STACK		0x0000FFF8
-#define CONFIG_SPL_BOARD_INIT
 
 /* Use the framework and generic lib */
 #define CONFIG_SPL_FRAMEWORK

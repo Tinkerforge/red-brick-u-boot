@@ -11,13 +11,9 @@
 
 #include <asm/arch/rmobile.h>
 
-#define CONFIG_CMD_DFL
 #define CONFIG_CMD_SDRAM
 
-#define CONFIG_SYS_THUMB_BUILD
-
 /* Support File sytems */
-#define CONFIG_FAT_WRITE
 #define CONFIG_SUPPORT_VFAT
 #define CONFIG_FS_EXT4
 #define CONFIG_EXT4_WRITE
@@ -27,7 +23,6 @@
 #define CONFIG_INITRD_TAG
 #define CONFIG_CMDLINE_EDITING
 
-#define CONFIG_BAUDRATE		38400
 #define CONFIG_BOOTARGS		""
 
 #undef	CONFIG_SHOW_BOOT_PROGRESS

@@ -47,7 +47,6 @@
 #undef LCD_TEST_PATTERN
 #define CONFIG_LCD_INFO
 #define CONFIG_LCD_INFO_BELOW_LOGO
-#define CONFIG_SYS_WHITE_ON_BLACK
 #define CONFIG_ATMEL_LCD
 #define CONFIG_ATMEL_LCD_RGB565
 /* board specific(not enough SRAM) */
@@ -99,8 +98,6 @@
 #define CONFIG_AT91_WANTS_COMMON_PHY
 
 /* USB */
-#define CONFIG_USB_EHCI
-#define CONFIG_USB_EHCI_ATMEL
 #define CONFIG_SYS_USB_EHCI_MAX_ROOT_PORTS	2
 
 #define CONFIG_SYS_LOAD_ADDR		0x22000000	/* load address */
@@ -119,7 +116,6 @@
 #define FAT_ENV_DEVICE_AND_PART	"0"
 #define FAT_ENV_FILE		"uboot.env"
 #define CONFIG_ENV_IS_IN_FAT
-#define CONFIG_FAT_WRITE
 #define CONFIG_ENV_SIZE		0x4000
 
 #define CONFIG_BOOTARGS		"console=ttyS0,115200 " \
@@ -128,8 +124,6 @@
 				"fatload mmc 0:1 0x22000000 zImage; " \
 				"bootz 0x22000000 - 0x21000000"
 #endif
-
-#define CONFIG_BAUDRATE			115200
 
 #define CONFIG_SYS_CBSIZE	256
 #define CONFIG_SYS_MAXARGS	16

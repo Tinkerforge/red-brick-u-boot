@@ -13,8 +13,7 @@
 #define __CONFIG_AM57XX_EVM_H
 
 #include <environment/ti/dfu.h>
-
-#define CONFIG_DRA7XX
+#include <linux/sizes.h>
 
 #ifdef CONFIG_SPL_BUILD
 #define CONFIG_IODELAY_RECALIBRATION
@@ -22,17 +21,23 @@
 
 #define CONFIG_NR_DRAM_BANKS		2
 
-#define CONFIG_ENV_SIZE			(64 << 10)
-#define CONFIG_ENV_IS_IN_FAT
-#define FAT_ENV_INTERFACE		"mmc"
-#define FAT_ENV_DEVICE_AND_PART		"0:1"
-#define FAT_ENV_FILE			"uboot.env"
+/* MMC ENV related defines */
+#define CONFIG_ENV_IS_IN_MMC
+#define CONFIG_SYS_MMC_ENV_DEV		1		/* eMMC */
+#define CONFIG_SYS_MMC_ENV_PART		0
+#define CONFIG_ENV_SIZE			SZ_128K
+#define CONFIG_ENV_OFFSET		0x260000
+#define CONFIG_ENV_OFFSET_REDUND	(CONFIG_ENV_OFFSET + CONFIG_ENV_SIZE)
+#define CONFIG_SYS_REDUNDAND_ENVIRONMENT
 
 #define CONSOLEDEV			"ttyO2"
 #define CONFIG_SYS_NS16550_COM1		UART1_BASE	/* Base EVM has UART0 */
 #define CONFIG_SYS_NS16550_COM2		UART2_BASE	/* UART2 */
 #define CONFIG_SYS_NS16550_COM3		UART3_BASE	/* UART3 */
-#define CONFIG_BAUDRATE			115200
+
+#define CONFIG_ENV_EEPROM_IS_ON_I2C
+#define CONFIG_SYS_I2C_EEPROM_ADDR	0x50	/* Main EEPROM */
+#define CONFIG_SYS_I2C_EEPROM_ADDR_LEN	2
 
 #define CONFIG_SYS_OMAP_ABE_SYSCK
 
@@ -45,7 +50,7 @@
 	"partitions_android=" \
 	"uuid_disk=${uuid_gpt_disk};" \
 	"name=xloader,start=128K,size=256K,uuid=${uuid_gpt_xloader};" \
-	"name=bootloader,size=768K,uuid=${uuid_gpt_bootloader};" \
+	"name=bootloader,size=1792K,uuid=${uuid_gpt_bootloader};" \
 	"name=environment,size=128K,uuid=${uuid_gpt_environment};" \
 	"name=misc,size=128K,uuid=${uuid_gpt_misc};" \
 	"name=reserved,size=256K,uuid=${uuid_gpt_reserved};" \
@@ -103,10 +108,6 @@
 #define CONFIG_SYS_SCSI_MAX_DEVICE	(CONFIG_SYS_SCSI_MAX_SCSI_ID * \
 						CONFIG_SYS_SCSI_MAX_LUN)
 
-/* EEPROM */
-#define CONFIG_EEPROM_CHIP_ADDRESS 0x50
-#define CONFIG_EEPROM_BUS_ADDRESS 0
-
 /*
  * Default to using SPI for environment, etc.
  * 0x000000 - 0x040000 : QSPI.SPL (256KiB)
@@ -120,11 +121,6 @@
 #define CONFIG_SYS_SPI_KERNEL_OFFS      0x1E0000
 #define CONFIG_SYS_SPI_ARGS_OFFS        0x140000
 #define CONFIG_SYS_SPI_ARGS_SIZE        0x80000
-
-#ifdef CONFIG_SPL_BUILD
-#undef CONFIG_DM_SPI
-#undef CONFIG_DM_SPI_FLASH
-#endif
 
 /* SPI SPL */
 #define CONFIG_TI_EDMA3

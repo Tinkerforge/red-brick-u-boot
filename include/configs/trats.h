@@ -38,7 +38,6 @@
 
 /* select serial console configuration */
 #define CONFIG_SERIAL2
-#define CONFIG_BAUDRATE			115200
 
 #define CONFIG_MACH_TYPE		MACH_TYPE_TRATS
 
@@ -189,7 +188,6 @@
 
 /* Download menu - definitions for check keys */
 #ifndef __ASSEMBLY__
-#include <power/max8997_pmic.h>
 
 #define KEY_PWR_PMIC_NAME		"MAX8997_PMIC"
 #define KEY_PWR_STATUS_REG		MAX8997_REG_STATUS1
@@ -203,7 +201,6 @@
 
 /* LCD console */
 #define LCD_BPP			LCD_COLOR16
-#define CONFIG_SYS_WHITE_ON_BLACK
 
 /* LCD */
 #define CONFIG_BMP_16BPP

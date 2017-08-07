@@ -376,7 +376,6 @@ extern int board_pci_host_broken(void);
 #define CONFIG_PQ_MDS_PIB	1 /* PQ MDS Platform IO Board */
 
 #define CONFIG_HAS_FSL_DR_USB	1 /* fixup device tree for the DR USB */
-#define CONFIG_USB_EHCI
 #define CONFIG_USB_EHCI_FSL
 #define CONFIG_EHCI_HCD_INIT_AFTER_RESET
 
@@ -469,7 +468,6 @@ extern int board_pci_host_broken(void);
 /*
  * Command line configuration.
  */
-#define CONFIG_CMD_DATE
 
 #if defined(CONFIG_PCI)
     #define CONFIG_CMD_PCI
@@ -643,8 +641,6 @@ extern int board_pci_host_broken(void);
 #define CONFIG_HAS_ETH0
 #define CONFIG_HAS_ETH1
 #endif
-
-#define CONFIG_BAUDRATE 115200
 
 #define CONFIG_LOADADDR 800000	/* default location for tftp and bootm */
 

@@ -19,6 +19,7 @@
 #include <asm/ti-common/davinci_nand.h>
 #include <asm/io.h>
 #include <linux/errno.h>
+#include <asm/mach-types.h>
 #include <asm/arch/davinci_misc.h>
 #ifdef CONFIG_MMC_DAVINCI
 #include <mmc.h>
@@ -171,9 +172,7 @@ int board_early_init_f(void)
 
 int board_init(void)
 {
-#ifndef CONFIG_USE_IRQ
 	irq_init();
-#endif
 
 	/* arch number of the board */
 	gd->bd->bi_arch_number = MACH_TYPE_OMAPL138_LCDK;

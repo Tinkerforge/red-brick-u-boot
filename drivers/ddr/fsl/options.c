@@ -9,6 +9,10 @@
 #include <fsl_ddr_sdram.h>
 
 #include <fsl_ddr.h>
+#if defined(CONFIG_FSL_LSCH2) || defined(CONFIG_FSL_LSCH3) || \
+	defined(CONFIG_ARM)
+#include <asm/arch/clock.h>
+#endif
 
 /*
  * Use our own stack based buffer before relocation to allow accessing longer
@@ -33,7 +37,7 @@ struct dynamic_odt {
 /* Quad rank is not verified yet due availability.
  * Replacing 20 OHM with 34 OHM since DDR4 doesn't have 20 OHM option
  */
-static const struct dynamic_odt single_Q[4] = {
+static __maybe_unused const struct dynamic_odt single_Q[4] = {
 	{	/* cs0 */
 		FSL_DDR_ODT_NEVER,
 		FSL_DDR_ODT_CS_AND_OTHER_DIMM,
@@ -60,7 +64,7 @@ static const struct dynamic_odt single_Q[4] = {
 	}
 };
 
-static const struct dynamic_odt single_D[4] = {
+static __maybe_unused const struct dynamic_odt single_D[4] = {
 	{	/* cs0 */
 		FSL_DDR_ODT_NEVER,
 		FSL_DDR_ODT_ALL,
@@ -77,7 +81,7 @@ static const struct dynamic_odt single_D[4] = {
 	{0, 0, 0, 0}
 };
 
-static const struct dynamic_odt single_S[4] = {
+static __maybe_unused const struct dynamic_odt single_S[4] = {
 	{	/* cs0 */
 		FSL_DDR_ODT_NEVER,
 		FSL_DDR_ODT_ALL,
@@ -89,7 +93,7 @@ static const struct dynamic_odt single_S[4] = {
 	{0, 0, 0, 0},
 };
 
-static const struct dynamic_odt dual_DD[4] = {
+static __maybe_unused const struct dynamic_odt dual_DD[4] = {
 	{	/* cs0 */
 		FSL_DDR_ODT_NEVER,
 		FSL_DDR_ODT_SAME_DIMM,
@@ -116,7 +120,7 @@ static const struct dynamic_odt dual_DD[4] = {
 	}
 };
 
-static const struct dynamic_odt dual_DS[4] = {
+static __maybe_unused const struct dynamic_odt dual_DS[4] = {
 	{	/* cs0 */
 		FSL_DDR_ODT_NEVER,
 		FSL_DDR_ODT_SAME_DIMM,
@@ -137,7 +141,7 @@ static const struct dynamic_odt dual_DS[4] = {
 	},
 	{0, 0, 0, 0}
 };
-static const struct dynamic_odt dual_SD[4] = {
+static __maybe_unused const struct dynamic_odt dual_SD[4] = {
 	{	/* cs0 */
 		FSL_DDR_ODT_OTHER_DIMM,
 		FSL_DDR_ODT_ALL,
@@ -159,7 +163,7 @@ static const struct dynamic_odt dual_SD[4] = {
 	}
 };
 
-static const struct dynamic_odt dual_SS[4] = {
+static __maybe_unused const struct dynamic_odt dual_SS[4] = {
 	{	/* cs0 */
 		FSL_DDR_ODT_OTHER_DIMM,
 		FSL_DDR_ODT_ALL,
@@ -176,7 +180,7 @@ static const struct dynamic_odt dual_SS[4] = {
 	{0, 0, 0, 0}
 };
 
-static const struct dynamic_odt dual_D0[4] = {
+static __maybe_unused const struct dynamic_odt dual_D0[4] = {
 	{	/* cs0 */
 		FSL_DDR_ODT_NEVER,
 		FSL_DDR_ODT_SAME_DIMM,
@@ -193,7 +197,7 @@ static const struct dynamic_odt dual_D0[4] = {
 	{0, 0, 0, 0}
 };
 
-static const struct dynamic_odt dual_0D[4] = {
+static __maybe_unused const struct dynamic_odt dual_0D[4] = {
 	{0, 0, 0, 0},
 	{0, 0, 0, 0},
 	{	/* cs2 */
@@ -210,7 +214,7 @@ static const struct dynamic_odt dual_0D[4] = {
 	}
 };
 
-static const struct dynamic_odt dual_S0[4] = {
+static __maybe_unused const struct dynamic_odt dual_S0[4] = {
 	{	/* cs0 */
 		FSL_DDR_ODT_NEVER,
 		FSL_DDR_ODT_CS,
@@ -223,7 +227,7 @@ static const struct dynamic_odt dual_S0[4] = {
 
 };
 
-static const struct dynamic_odt dual_0S[4] = {
+static __maybe_unused const struct dynamic_odt dual_0S[4] = {
 	{0, 0, 0, 0},
 	{0, 0, 0, 0},
 	{	/* cs2 */
@@ -236,7 +240,7 @@ static const struct dynamic_odt dual_0S[4] = {
 
 };
 
-static const struct dynamic_odt odt_unknown[4] = {
+static __maybe_unused const struct dynamic_odt odt_unknown[4] = {
 	{	/* cs0 */
 		FSL_DDR_ODT_NEVER,
 		FSL_DDR_ODT_CS,
@@ -263,7 +267,7 @@ static const struct dynamic_odt odt_unknown[4] = {
 	}
 };
 #elif defined(CONFIG_SYS_FSL_DDR3)
-static const struct dynamic_odt single_Q[4] = {
+static __maybe_unused const struct dynamic_odt single_Q[4] = {
 	{	/* cs0 */
 		FSL_DDR_ODT_NEVER,
 		FSL_DDR_ODT_CS_AND_OTHER_DIMM,
@@ -290,7 +294,7 @@ static const struct dynamic_odt single_Q[4] = {
 	}
 };
 
-static const struct dynamic_odt single_D[4] = {
+static __maybe_unused const struct dynamic_odt single_D[4] = {
 	{	/* cs0 */
 		FSL_DDR_ODT_NEVER,
 		FSL_DDR_ODT_ALL,
@@ -307,7 +311,7 @@ static const struct dynamic_odt single_D[4] = {
 	{0, 0, 0, 0}
 };
 
-static const struct dynamic_odt single_S[4] = {
+static __maybe_unused const struct dynamic_odt single_S[4] = {
 	{	/* cs0 */
 		FSL_DDR_ODT_NEVER,
 		FSL_DDR_ODT_ALL,
@@ -319,7 +323,7 @@ static const struct dynamic_odt single_S[4] = {
 	{0, 0, 0, 0},
 };
 
-static const struct dynamic_odt dual_DD[4] = {
+static __maybe_unused const struct dynamic_odt dual_DD[4] = {
 	{	/* cs0 */
 		FSL_DDR_ODT_NEVER,
 		FSL_DDR_ODT_SAME_DIMM,
@@ -346,7 +350,7 @@ static const struct dynamic_odt dual_DD[4] = {
 	}
 };
 
-static const struct dynamic_odt dual_DS[4] = {
+static __maybe_unused const struct dynamic_odt dual_DS[4] = {
 	{	/* cs0 */
 		FSL_DDR_ODT_NEVER,
 		FSL_DDR_ODT_SAME_DIMM,
@@ -367,7 +371,7 @@ static const struct dynamic_odt dual_DS[4] = {
 	},
 	{0, 0, 0, 0}
 };
-static const struct dynamic_odt dual_SD[4] = {
+static __maybe_unused const struct dynamic_odt dual_SD[4] = {
 	{	/* cs0 */
 		FSL_DDR_ODT_OTHER_DIMM,
 		FSL_DDR_ODT_ALL,
@@ -389,7 +393,7 @@ static const struct dynamic_odt dual_SD[4] = {
 	}
 };
 
-static const struct dynamic_odt dual_SS[4] = {
+static __maybe_unused const struct dynamic_odt dual_SS[4] = {
 	{	/* cs0 */
 		FSL_DDR_ODT_OTHER_DIMM,
 		FSL_DDR_ODT_ALL,
@@ -406,7 +410,7 @@ static const struct dynamic_odt dual_SS[4] = {
 	{0, 0, 0, 0}
 };
 
-static const struct dynamic_odt dual_D0[4] = {
+static __maybe_unused const struct dynamic_odt dual_D0[4] = {
 	{	/* cs0 */
 		FSL_DDR_ODT_NEVER,
 		FSL_DDR_ODT_SAME_DIMM,
@@ -423,7 +427,7 @@ static const struct dynamic_odt dual_D0[4] = {
 	{0, 0, 0, 0}
 };
 
-static const struct dynamic_odt dual_0D[4] = {
+static __maybe_unused const struct dynamic_odt dual_0D[4] = {
 	{0, 0, 0, 0},
 	{0, 0, 0, 0},
 	{	/* cs2 */
@@ -440,7 +444,7 @@ static const struct dynamic_odt dual_0D[4] = {
 	}
 };
 
-static const struct dynamic_odt dual_S0[4] = {
+static __maybe_unused const struct dynamic_odt dual_S0[4] = {
 	{	/* cs0 */
 		FSL_DDR_ODT_NEVER,
 		FSL_DDR_ODT_CS,
@@ -453,7 +457,7 @@ static const struct dynamic_odt dual_S0[4] = {
 
 };
 
-static const struct dynamic_odt dual_0S[4] = {
+static __maybe_unused const struct dynamic_odt dual_0S[4] = {
 	{0, 0, 0, 0},
 	{0, 0, 0, 0},
 	{	/* cs2 */
@@ -466,7 +470,7 @@ static const struct dynamic_odt dual_0S[4] = {
 
 };
 
-static const struct dynamic_odt odt_unknown[4] = {
+static __maybe_unused const struct dynamic_odt odt_unknown[4] = {
 	{	/* cs0 */
 		FSL_DDR_ODT_NEVER,
 		FSL_DDR_ODT_CS,
@@ -493,14 +497,14 @@ static const struct dynamic_odt odt_unknown[4] = {
 	}
 };
 #else	/* CONFIG_SYS_FSL_DDR3 */
-static const struct dynamic_odt single_Q[4] = {
+static __maybe_unused const struct dynamic_odt single_Q[4] = {
 	{0, 0, 0, 0},
 	{0, 0, 0, 0},
 	{0, 0, 0, 0},
 	{0, 0, 0, 0}
 };
 
-static const struct dynamic_odt single_D[4] = {
+static __maybe_unused const struct dynamic_odt single_D[4] = {
 	{	/* cs0 */
 		FSL_DDR_ODT_NEVER,
 		FSL_DDR_ODT_ALL,
@@ -517,7 +521,7 @@ static const struct dynamic_odt single_D[4] = {
 	{0, 0, 0, 0}
 };
 
-static const struct dynamic_odt single_S[4] = {
+static __maybe_unused const struct dynamic_odt single_S[4] = {
 	{	/* cs0 */
 		FSL_DDR_ODT_NEVER,
 		FSL_DDR_ODT_ALL,
@@ -529,7 +533,7 @@ static const struct dynamic_odt single_S[4] = {
 	{0, 0, 0, 0},
 };
 
-static const struct dynamic_odt dual_DD[4] = {
+static __maybe_unused const struct dynamic_odt dual_DD[4] = {
 	{	/* cs0 */
 		FSL_DDR_ODT_OTHER_DIMM,
 		FSL_DDR_ODT_OTHER_DIMM,
@@ -556,7 +560,7 @@ static const struct dynamic_odt dual_DD[4] = {
 	}
 };
 
-static const struct dynamic_odt dual_DS[4] = {
+static __maybe_unused const struct dynamic_odt dual_DS[4] = {
 	{	/* cs0 */
 		FSL_DDR_ODT_OTHER_DIMM,
 		FSL_DDR_ODT_OTHER_DIMM,
@@ -578,7 +582,7 @@ static const struct dynamic_odt dual_DS[4] = {
 	{0, 0, 0, 0}
 };
 
-static const struct dynamic_odt dual_SD[4] = {
+static __maybe_unused const struct dynamic_odt dual_SD[4] = {
 	{	/* cs0 */
 		FSL_DDR_ODT_OTHER_DIMM,
 		FSL_DDR_ODT_OTHER_DIMM,
@@ -600,7 +604,7 @@ static const struct dynamic_odt dual_SD[4] = {
 	}
 };
 
-static const struct dynamic_odt dual_SS[4] = {
+static __maybe_unused const struct dynamic_odt dual_SS[4] = {
 	{	/* cs0 */
 		FSL_DDR_ODT_OTHER_DIMM,
 		FSL_DDR_ODT_OTHER_DIMM,
@@ -617,7 +621,7 @@ static const struct dynamic_odt dual_SS[4] = {
 	{0, 0, 0, 0}
 };
 
-static const struct dynamic_odt dual_D0[4] = {
+static __maybe_unused const struct dynamic_odt dual_D0[4] = {
 	{	/* cs0 */
 		FSL_DDR_ODT_NEVER,
 		FSL_DDR_ODT_ALL,
@@ -634,7 +638,7 @@ static const struct dynamic_odt dual_D0[4] = {
 	{0, 0, 0, 0}
 };
 
-static const struct dynamic_odt dual_0D[4] = {
+static __maybe_unused const struct dynamic_odt dual_0D[4] = {
 	{0, 0, 0, 0},
 	{0, 0, 0, 0},
 	{	/* cs2 */
@@ -651,7 +655,7 @@ static const struct dynamic_odt dual_0D[4] = {
 	}
 };
 
-static const struct dynamic_odt dual_S0[4] = {
+static __maybe_unused const struct dynamic_odt dual_S0[4] = {
 	{	/* cs0 */
 		FSL_DDR_ODT_NEVER,
 		FSL_DDR_ODT_CS,
@@ -664,7 +668,7 @@ static const struct dynamic_odt dual_S0[4] = {
 
 };
 
-static const struct dynamic_odt dual_0S[4] = {
+static __maybe_unused const struct dynamic_odt dual_0S[4] = {
 	{0, 0, 0, 0},
 	{0, 0, 0, 0},
 	{	/* cs2 */
@@ -677,7 +681,7 @@ static const struct dynamic_odt dual_0S[4] = {
 
 };
 
-static const struct dynamic_odt odt_unknown[4] = {
+static __maybe_unused const struct dynamic_odt odt_unknown[4] = {
 	{	/* cs0 */
 		FSL_DDR_ODT_NEVER,
 		FSL_DDR_ODT_CS,
@@ -916,7 +920,7 @@ unsigned int populate_memctl_options(const common_timing_params_t *common_dimm,
 		if ((pdimm[0].data_width >= 64) && \
 			(pdimm[0].data_width <= 72))
 			popts->data_bus_width = 0;
-		else if ((pdimm[0].data_width >= 32) || \
+		else if ((pdimm[0].data_width >= 32) && \
 			(pdimm[0].data_width <= 40))
 			popts->data_bus_width = 1;
 		else {

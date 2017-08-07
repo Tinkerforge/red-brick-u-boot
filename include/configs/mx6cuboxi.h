@@ -40,12 +40,9 @@
 #define CONFIG_VIDEO_LOGO
 #define CONFIG_VIDEO_BMP_LOGO
 #define CONFIG_IMX_HDMI
-#define CONFIG_CMD_HDMIDETECT
 #define CONFIG_IMX_VIDEO_SKIP
 
 /* USB */
-#define CONFIG_USB_EHCI
-#define CONFIG_USB_EHCI_MX6
 #define CONFIG_EHCI_HCD_INIT_AFTER_RESET
 #define CONFIG_MXC_USB_PORTSC		(PORT_PTS_UTMI | PORT_PTS_PTW)
 #define CONFIG_MXC_USB_FLAGS		0
@@ -84,7 +81,7 @@
 	"initrd_high=0xffffffff\0" \
 	"fdt_high=0xffffffff\0" \
 	"ip_dyn=yes\0" \
-	"console=" CONSOLE_DEV "\0" \
+	"console=" CONSOLE_DEV ",115200\0" \
 	"bootm_size=0x10000000\0" \
 	"mmcdev=" __stringify(CONFIG_SYS_MMC_ENV_DEV) "\0" \
 	"update_sd_firmware=" \

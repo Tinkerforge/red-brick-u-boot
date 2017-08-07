@@ -49,10 +49,9 @@
 
 /* allow to overwrite serial and ethaddr */
 #define CONFIG_ENV_OVERWRITE
-#define CONFIG_BAUDRATE			115200
 
 /* turn on command-line edit/hist/auto */
-#define CONFIG_COMMAND_HISTORY
+#define CONFIG_CMDLINE_EDITING
 
 /*
  * Increasing the size of the IO buffer as default nfsargs size is more
@@ -88,11 +87,8 @@
 						CONFIG_SYS_INIT_RAM_SIZE - \
 						GENERATED_GBL_DATA_SIZE)
 
-#define CONFIG_CMD_ENTERRCM
-
 /* Defines for SPL */
 #define CONFIG_SPL_FRAMEWORK
-#define CONFIG_SPL_BOARD_INIT
 #define CONFIG_SPL_NAND_SIMPLE
 #define CONFIG_SPL_MAX_FOOTPRINT	(CONFIG_SYS_TEXT_BASE - \
 						CONFIG_SPL_TEXT_BASE)
@@ -100,11 +96,9 @@
 
 /* Misc utility code */
 #define CONFIG_BOUNCE_BUFFER
-#define CONFIG_CRC32_VERIFY
 
 #ifndef CONFIG_SPL_BUILD
 #include <config_distro_defaults.h>
-#define CONFIG_FAT_WRITE
 #endif
 
 #endif /* _TEGRA_COMMON_H_ */

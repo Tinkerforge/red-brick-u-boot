@@ -14,10 +14,8 @@
 #define CONFIG_NR_DRAM_BANKS		1
 #define CONFIG_ENV_SIZE			0x2000
 #define CONFIG_SYS_MAXARGS		16
-#define CONFIG_BAUDRATE			115200
 #define CONFIG_SYS_MALLOC_LEN		(32 << 20)
 #define CONFIG_SYS_CBSIZE		1024
-#define CONFIG_SYS_THUMB_BUILD
 
 #define CONFIG_SYS_TIMER_RATE		(24 * 1000 * 1000)
 #define	CONFIG_SYS_TIMER_BASE		0xff810020 /* TIMER7 */
@@ -25,7 +23,6 @@
 
 #define CONFIG_SPL_FRAMEWORK
 #define CONFIG_SYS_NS16550_MEM32
-#define CONFIG_SPL_BOARD_INIT
 
 #ifdef CONFIG_ROCKCHIP_SPL_BACK_TO_BROM
 /* Bootrom will load u-boot binary to 0x0 once return from SPL */
@@ -40,8 +37,6 @@
 
 /* MMC/SD IP block */
 #define CONFIG_BOUNCE_BUFFER
-
-#define CONFIG_FAT_WRITE
 
 /* RAW SD card / eMMC locations. */
 #define CONFIG_SYS_SPI_U_BOOT_OFFS	(128 << 10)

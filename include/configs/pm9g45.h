@@ -69,7 +69,6 @@
  */
 #define CONFIG_CMD_NAND		1
 
-#define CONFIG_CMD_JFFS2		1
 #define CONFIG_JFFS2_CMDLINE		1
 #define CONFIG_JFFS2_NAND		1
 #define CONFIG_JFFS2_DEV		"nand0" /* NAND dev jffs2 lives on */
@@ -132,8 +131,6 @@
 				"256k(uboot)ro,1664k(env)," \
 				"2M(linux)ro,-(root) rw " \
 				"rootfstype=jffs2"
-
-#define CONFIG_BAUDRATE			115200
 
 #define CONFIG_SYS_CBSIZE		256
 #define CONFIG_SYS_MAXARGS		16

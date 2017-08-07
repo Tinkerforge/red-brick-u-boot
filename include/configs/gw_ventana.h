@@ -8,7 +8,6 @@
 #define __CONFIG_H
 
 /* SPL */
-#define CONFIG_SPL_BOARD_INIT
 /* Location in NAND to read U-Boot from */
 #define CONFIG_SYS_NAND_U_BOOT_OFFS     (14 * SZ_1M)
 
@@ -68,7 +67,7 @@
   #define CONFIG_SF_DEFAULT_MODE             (SPI_MODE_0)
 #endif
 
-#else
+#elif defined(CONFIG_SPL_NAND_SUPPORT)
 /* Enable NAND support */
 #define CONFIG_CMD_NAND
 #define CONFIG_CMD_NAND_TRIMFFS
@@ -95,12 +94,14 @@
 #define CONFIG_SYS_I2C_MXC_I2C3		/* enable I2C bus 3 */
 #define CONFIG_SYS_I2C_SPEED		100000
 #define CONFIG_I2C_GSC			0
-#define CONFIG_I2C_PMIC			1
 #define CONFIG_I2C_EDID
 
 /* MMC Configs */
 #define CONFIG_SYS_FSL_ESDHC_ADDR      0
-#define CONFIG_SYS_FSL_USDHC_NUM       1
+
+/* eMMC Configs */
+#define CONFIG_SUPPORT_EMMC_BOOT
+#define CONFIG_SUPPORT_EMMC_RPMB
 
 /* Filesystem support */
 #define CONFIG_CMD_UBIFS
@@ -139,10 +140,7 @@
 #define CONFIG_POWER_LTC3676_I2C_ADDR  0x3c
 
 /* Various command support */
-#define CONFIG_CMD_BMODE         /* set eFUSE shadow for a boot dev and reset */
-#define CONFIG_CMD_HDMIDETECT    /* detect HDMI output device */
-#define CONFIG_CMD_GSC
-#define CONFIG_CMD_EECONFIG      /* Gateworks EEPROM config cmd */
+#define CONFIG_CMD_UNZIP         /* gzwrite */
 #define CONFIG_RBTREE
 
 /* Ethernet support */
@@ -151,12 +149,9 @@
 #define IMX_FEC_BASE             ENET_BASE_ADDR
 #define CONFIG_FEC_XCV_TYPE      RGMII
 #define CONFIG_FEC_MXC_PHYADDR   0
-#define CONFIG_PHYLIB
 #define CONFIG_ARP_TIMEOUT       200UL
 
 /* USB Configs */
-#define CONFIG_USB_EHCI
-#define CONFIG_USB_EHCI_MX6
 #define CONFIG_USB_HOST_ETHER
 #define CONFIG_USB_ETHER_ASIX
 #define CONFIG_USB_ETHER_SMSC95XX
@@ -177,7 +172,6 @@
 #define CONFIG_VIDEO_IPUV3
 #define CONFIG_VIDEO_LOGO
 #define CONFIG_IPUV3_CLK          260000000
-#define CONFIG_CMD_HDMIDETECT
 #define CONFIG_IMX_HDMI
 #define CONFIG_IMX_VIDEO_SKIP
 #define CONFIG_VIDEO_BMP_LOGO
@@ -226,12 +220,15 @@
 
 /* Persistent Environment Config */
 #ifdef CONFIG_SPI_FLASH
-#define CONFIG_ENV_IS_IN_SPI_FLASH
+  #define CONFIG_ENV_IS_IN_SPI_FLASH
+#elif defined(CONFIG_SPL_NAND_SUPPORT)
+  #define CONFIG_ENV_IS_IN_NAND
 #else
-#define CONFIG_ENV_IS_IN_NAND
+  #define CONFIG_ENV_IS_IN_MMC
 #endif
 #if defined(CONFIG_ENV_IS_IN_MMC)
   #define CONFIG_SYS_MMC_ENV_DEV         0
+  #define CONFIG_SYS_MMC_ENV_PART        1
   #define CONFIG_ENV_OFFSET              (709 * SZ_1K)
   #define CONFIG_ENV_SIZE                (128 * SZ_1K)
   #define CONFIG_ENV_OFFSET_REDUND       (CONFIG_ENV_OFFSET + (128 * SZ_1K))
@@ -295,14 +292,14 @@
 		"fi\0" \
 	\
 	"uimage=uImage\0" \
-	"mmc_root=/dev/mmcblk0p1 rootfstype=${fs} rootwait rw\0" \
+	"mmc_root=mmcblk0p1\0" \
 	"mmc_boot=" \
 		"setenv fsload \"${fs}load mmc ${disk}:${part}\"; " \
 		"mmc dev ${disk} && mmc rescan && " \
 		"setenv dtype mmc; run loadscript; " \
 		"if ${fsload} ${loadaddr} ${bootdir}/${uimage}; then " \
 			"setenv bootargs console=${console},${baudrate} " \
-				"root=/dev/mmcblk0p1 rootfstype=${fs} " \
+				"root=/dev/${mmc_root} rootfstype=${fs} " \
 				"rootwait rw ${video} ${extra}; " \
 			"if run loadfdt; then " \
 				"bootm ${loadaddr} - ${fdt_addr}; " \

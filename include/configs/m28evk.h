@@ -14,11 +14,6 @@
 #define CONFIG_TIMESTAMP		/* Print image info with timestamp */
 
 /* U-Boot Commands */
-#define CONFIG_FAT_WRITE
-
-#define CONFIG_CMD_BMP
-#define CONFIG_CMD_DATE
-#define CONFIG_CMD_EEPROM
 #define CONFIG_CMD_NAND
 #define CONFIG_CMD_NAND_TRIMFFS
 
@@ -63,11 +58,6 @@
 /* FEC Ethernet on SoC */
 #ifdef CONFIG_CMD_NET
 #define CONFIG_FEC_MXC
-#endif
-
-/* EEPROM */
-#ifdef CONFIG_CMD_EEPROM
-#define CONFIG_SYS_I2C_EEPROM_ADDR_LEN	2
 #endif
 
 /* RTC */
@@ -115,7 +105,6 @@
 #ifdef CONFIG_VIDEO
 #define	CONFIG_VIDEO_LOGO
 #define	CONFIG_SPLASH_SCREEN
-#define	CONFIG_CMD_BMP
 #define	CONFIG_BMP_16BPP
 #define	CONFIG_VIDEO_BMP_RLE8
 #define	CONFIG_VIDEO_BMP_GZIP

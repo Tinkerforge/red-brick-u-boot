@@ -18,6 +18,7 @@
 #include <common.h>
 #include <netdev.h>
 #include <asm/io.h>
+#include <asm/mach-types.h>
 #include <asm/arch/ep93xx.h>
 
 DECLARE_GLOBAL_DATA_PTR;
@@ -216,9 +217,11 @@ static unsigned dram_init_banksize_int(int print)
 	return dram_total;
 }
 
-void dram_init_banksize(void)
+int dram_init_banksize(void)
 {
 	dram_init_banksize_int(0);
+
+	return 0;
 }
 
 /* called in board_init_f (before relocation) */

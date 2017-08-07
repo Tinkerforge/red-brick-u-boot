@@ -23,6 +23,7 @@
 #include <asm/arch/davinci_misc.h>
 #include <linux/errno.h>
 #include <hwconfig.h>
+#include <asm/mach-types.h>
 
 #ifdef CONFIG_MMC_DAVINCI
 #include <mmc.h>
@@ -323,9 +324,7 @@ int board_early_init_f(void)
 
 int board_init(void)
 {
-#ifndef CONFIG_USE_IRQ
 	irq_init();
-#endif
 
 #ifdef CONFIG_NAND_DAVINCI
 	/*

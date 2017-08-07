@@ -14,9 +14,6 @@
 
 #include <linux/sizes.h>
 
-/* enable PMIC */
-#define CONFIG_AS3722_POWER
-
 #include "tegra124-common.h"
 
 /* High-level configuration options */
@@ -41,7 +38,6 @@
 #define CONFIG_SPI_FLASH_SIZE		(4 << 20)
 
 /* USB Host support */
-#define CONFIG_USB_EHCI
 #define CONFIG_USB_EHCI_TEGRA
 
 /* USB networking support */

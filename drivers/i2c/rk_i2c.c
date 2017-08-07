@@ -369,7 +369,7 @@ static int rockchip_i2c_probe(struct udevice *bus)
 {
 	struct rk_i2c *priv = dev_get_priv(bus);
 
-	priv->regs = (void *)dev_get_addr(bus);
+	priv->regs = (void *)devfdt_get_addr(bus);
 
 	return 0;
 }
@@ -380,7 +380,10 @@ static const struct dm_i2c_ops rockchip_i2c_ops = {
 };
 
 static const struct udevice_id rockchip_i2c_ids[] = {
+	{ .compatible = "rockchip,rk3066-i2c" },
+	{ .compatible = "rockchip,rk3188-i2c" },
 	{ .compatible = "rockchip,rk3288-i2c" },
+	{ .compatible = "rockchip,rk3399-i2c" },
 	{ }
 };
 

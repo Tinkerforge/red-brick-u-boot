@@ -92,7 +92,6 @@
 /* NS16550 Configuration */
 #define CONFIG_SYS_NS16550_COM1		0x44e09000	/* UART0 */
 #define CONFIG_SYS_NS16550_COM2		0x48022000	/* UART1 */
-#define CONFIG_BAUDRATE			115200
 
 /* I2C Configuration */
 #define CONFIG_SYS_I2C_EEPROM_ADDR	0x50	/* Main EEPROM */
@@ -100,7 +99,7 @@
 #define CONFIG_SYS_I2C_EEPROM_BUS	0
 
 /* SPL */
-#define CONFIG_SPL_LDSCRIPT		"arch/arm/mach-omap2/am33xx/u-boot-spl.lds"
+#define CONFIG_SPL_LDSCRIPT		"arch/arm/mach-omap2/u-boot-spl.lds"
 
 /* Network. */
 #define CONFIG_PHY_GIGE
@@ -154,15 +153,11 @@
 /* Status LED polarity is inversed, so init it in the "off" state */
 
 /* EEPROM */
-#define CONFIG_CMD_EEPROM
 #define CONFIG_ENV_EEPROM_IS_ON_I2C
 #define CONFIG_SYS_I2C_EEPROM_ADDR_LEN		1
 #define CONFIG_SYS_EEPROM_PAGE_WRITE_BITS	4
 #define CONFIG_SYS_EEPROM_PAGE_WRITE_DELAY_MS	5
 #define CONFIG_SYS_EEPROM_SIZE			256
-
-#define CONFIG_CMD_EEPROM_LAYOUT
-#define CONFIG_EEPROM_LAYOUT_HELP_STRING "v2, v3"
 
 #ifndef CONFIG_SPL_BUILD
 /*

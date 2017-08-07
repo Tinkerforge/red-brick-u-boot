@@ -53,7 +53,6 @@
  */
 
 #define CONFIG_CONS_INDEX	1	/*Console on UART0 */
-#define CONFIG_BAUDRATE			115200
 #define CONFIG_SYS_BAUDRATE_TABLE	{ 9600, 19200, 38400, 57600, \
 					  115200,230400, 460800, 921600 }
 /* auto boot */
@@ -122,7 +121,6 @@
  * Common USB/EHCI configuration
  */
 #if defined(CONFIG_CMD_USB) && !defined(CONFIG_DM)
-#define CONFIG_USB_EHCI		/* Enable EHCI USB support */
 #define CONFIG_SUPPORT_VFAT
 #endif /* CONFIG_CMD_USB */
 
@@ -130,7 +128,6 @@
  * File system
  */
 #ifdef CONFIG_SYS_MVFS
-#define CONFIG_CMD_JFFS2
 #define CONFIG_CMD_UBIFS
 #define CONFIG_RBTREE
 #define CONFIG_MTD_DEVICE               /* needed for mtdparts commands */

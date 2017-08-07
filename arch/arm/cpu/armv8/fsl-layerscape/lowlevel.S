@@ -73,10 +73,13 @@ ENDPROC(smp_kick_all_cpus)
 ENTRY(lowlevel_init)
 	mov	x29, lr			/* Save LR */
 
+	switch_el x1, 1f, 100f, 100f	/* skip if not in EL3 */
+1:
+
 #ifdef CONFIG_FSL_LSCH3
 
 	/* Set Wuo bit for RN-I 20 */
-#ifdef CONFIG_LS2080A
+#ifdef CONFIG_ARCH_LS2080A
 	ldr	x0, =CCI_AUX_CONTROL_BASE(20)
 	ldr	x1, =0x00000010
 	bl	ccn504_set_aux
@@ -193,6 +196,7 @@ ENTRY(lowlevel_init)
 #endif
 #endif
 
+100:
 	branch_if_master x0, x1, 2f
 
 #if defined(CONFIG_MP) && defined(CONFIG_ARMV8_MULTIENTRY)
@@ -201,6 +205,8 @@ ENTRY(lowlevel_init)
 #endif
 
 2:
+	switch_el x1, 1f, 100f, 100f	/* skip if not in EL3 */
+1:
 #ifdef CONFIG_FSL_TZPC_BP147
 	/* Set Non Secure access for all devices protected via TZPC */
 	ldr	x1, =TZPCDECPROT_0_SET_BASE /* Decode Protection-0 Set Reg */
@@ -229,12 +235,8 @@ ENTRY(lowlevel_init)
 	 * NOTE: As per the CCSR map doc, TZASC 3 and TZASC 4 are just
 	 * 	 placeholders.
 	 */
+#ifdef CONFIG_FSL_TZASC_1
 	ldr	x1, =TZASC_GATE_KEEPER(0)
-	ldr	w0, [x1]		/* Filter 0 Gate Keeper Register */
-	orr	w0, w0, #1 << 0		/* Set open_request for Filter 0 */
-	str	w0, [x1]
-
-	ldr	x1, =TZASC_GATE_KEEPER(1)
 	ldr	w0, [x1]		/* Filter 0 Gate Keeper Register */
 	orr	w0, w0, #1 << 0		/* Set open_request for Filter 0 */
 	str	w0, [x1]
@@ -245,27 +247,36 @@ ENTRY(lowlevel_init)
 	orr	w0, w0, #1 << 30	/* Set Sec global read en, Bit[30] */
 	str	w0, [x1]
 
+	ldr	x1, =TZASC_REGION_ID_ACCESS_0(0)
+	ldr	w0, [x1]		/* Region-0 Access Register */
+	mov	w0, #0xFFFFFFFF		/* Set nsaid_wr_en and nsaid_rd_en */
+	str	w0, [x1]
+#endif
+#ifdef CONFIG_FSL_TZASC_2
+	ldr	x1, =TZASC_GATE_KEEPER(1)
+	ldr	w0, [x1]		/* Filter 0 Gate Keeper Register */
+	orr	w0, w0, #1 << 0		/* Set open_request for Filter 0 */
+	str	w0, [x1]
+
 	ldr	x1, =TZASC_REGION_ATTRIBUTES_0(1)
 	ldr	w0, [x1]		/* Region-1 Attributes Register */
 	orr	w0, w0, #1 << 31	/* Set Sec global write en, Bit[31] */
 	orr	w0, w0, #1 << 30	/* Set Sec global read en, Bit[30] */
 	str	w0, [x1]
 
-	ldr	x1, =TZASC_REGION_ID_ACCESS_0(0)
-	ldr	w0, [x1]		/* Region-0 Access Register */
-	mov	w0, #0xFFFFFFFF		/* Set nsaid_wr_en and nsaid_rd_en */
-	str	w0, [x1]
-
 	ldr	x1, =TZASC_REGION_ID_ACCESS_0(1)
 	ldr	w0, [x1]		/* Region-1 Attributes Register */
 	mov	w0, #0xFFFFFFFF		/* Set nsaid_wr_en and nsaid_rd_en */
 	str	w0, [x1]
-
+#endif
 	isb
 	dsb	sy
 #endif
+100:
 1:
 #ifdef CONFIG_ARCH_LS1046A
+	switch_el x1, 1f, 100f, 100f	/* skip if not in EL3 */
+1:
 	/* Initialize the L2 RAM latency */
 	mrs   x1, S3_1_c11_c0_2
 	mov   x0, #0x1C7
@@ -277,6 +288,7 @@ ENTRY(lowlevel_init)
 	orr   x1,  x1, #0x80
 	msr   S3_1_c11_c0_2, x1
 	isb
+100:
 #endif
 
 #if defined(CONFIG_FSL_LSCH2) && !defined(CONFIG_SPL_BUILD)
@@ -377,11 +389,14 @@ ENTRY(__asm_flush_l3_dcache)
 	/*
 	 * Return status in x0
 	 *    success 0
-	 *    tmeout 1 for setting SFONLY, 2 for FAM, 3 for both
+	 *    timeout 1 for setting SFONLY, 2 for FAM, 3 for both
 	 */
 	mov	x29, lr
 	mov	x8, #0
 
+	switch_el x0, 1f, 100f, 100f	/* skip if not in EL3 */
+
+1:
 	dsb	sy
 	mov	x0, #0x1		/* HNFPSTAT_SFONLY */
 	bl	hnf_set_pstate
@@ -399,6 +414,7 @@ ENTRY(__asm_flush_l3_dcache)
 	bl	hnf_pstate_poll
 	cbz	x0, 1f
 	add	x8, x8, #0x2
+100:
 1:
 	mov	x0, x8
 	mov	lr, x29

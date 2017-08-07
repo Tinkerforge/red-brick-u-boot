@@ -54,10 +54,6 @@
 /*
  * U-Boot Commands
  */
-#define CONFIG_CMD_BSP		/* Board Specific functions	*/
-#define CONFIG_CMD_DATE
-#define CONFIG_CMD_EEPROM
-#define CONFIG_CMD_IMX_FUSE	/* imx iim fuse                 */
 #define CONFIG_CMD_MTDPARTS	/* MTD partition support	*/
 #define CONFIG_CMD_NAND		/* NAND support			*/
 #define CONFIG_CMD_NAND_LOCK_UNLOCK
@@ -200,7 +196,6 @@
  */
 #define CONFIG_MXC_UART
 #define CONFIG_CONS_INDEX		1
-#define CONFIG_BAUDRATE			115200
 #define CONFIG_MXC_UART_BASE		UART1_BASE
 
 /*

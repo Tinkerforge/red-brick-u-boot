@@ -185,7 +185,6 @@
 
 #define CONFIG_PCA9698			/* NXP PCA9698 */
 
-#define CONFIG_CMD_EEPROM
 #define CONFIG_SYS_I2C_EEPROM_ADDR 0x52
 #define CONFIG_SYS_I2C_EEPROM_ADDR_LEN 2
 
@@ -198,8 +197,6 @@
 #define CONFIG_SF_DEFAULT_SPEED		10000000
 #define CONFIG_SF_DEFAULT_MODE		0
 #endif
-
-#define CONFIG_SHA1
 
 /*
  * MMC
@@ -214,7 +211,6 @@
  */
 #define CONFIG_FSL_DIU_FB
 #define CONFIG_SYS_DIU_ADDR	(CONFIG_SYS_CCSRBAR + 0x10000)
-#define CONFIG_CMD_BMP
 
 /*
  * General PCI
@@ -292,7 +288,6 @@
 /*
  * USB
  */
-#define CONFIG_USB_EHCI
 
 #define CONFIG_HAS_FSL_DR_USB
 #define CONFIG_USB_EHCI_FSL
@@ -346,8 +341,6 @@
 
 #ifndef CONFIG_TRAILBLAZER
 
-#define CONFIG_CMD_ERRATA
-#define CONFIG_CMD_IRQ
 #define CONFIG_CMD_REGINFO
 
 /*
@@ -384,9 +377,6 @@
  */
 
 #ifdef CONFIG_TRAILBLAZER
-
-#define CONFIG_BAUDRATE	115200
-
 #define	CONFIG_EXTRA_ENV_SETTINGS				\
 	"mp_holdoff=1\0"
 
@@ -398,9 +388,6 @@
 #define CONFIG_UBOOTPATH	u-boot.bin	/* U-Boot image on TFTP */
 
 #define CONFIG_LOADADDR		1000000
-
-
-#define CONFIG_BAUDRATE	115200
 
 #define	CONFIG_EXTRA_ENV_SETTINGS				\
 	"netdev=eth0\0"						\

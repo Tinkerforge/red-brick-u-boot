@@ -25,7 +25,6 @@
 #define CONFIG_SYS_I2C_TEGRA
 
 /* USB host support */
-#define CONFIG_USB_EHCI
 #define CONFIG_USB_EHCI_TEGRA
 #define CONFIG_USB_MAX_CONTROLLER_COUNT	3
 
@@ -39,8 +38,6 @@
 #define CONFIG_TFTP_TSIZE
 
 /* LCD support */
-#define CONFIG_SYS_WHITE_ON_BLACK
-#define CONFIG_CMD_BMP
 #define CONFIG_LCD_LOGO
 
 /* NAND support */
@@ -70,10 +67,6 @@
 #define CONFIG_LZO
 #define CONFIG_RBTREE
 
-/* Debug commands */
-
-/* Miscellaneous commands */
-#define CONFIG_FAT_WRITE
 
 #define BOARD_EXTRA_ENV_SETTINGS \
 	"mtdparts=" MTDPARTS_DEFAULT "\0"

@@ -175,16 +175,13 @@ struct zynq_gem_priv {
 	u32 rxbd_current;
 	u32 rx_first_buf;
 	int phyaddr;
-	u32 emio;
 	int init;
 	struct zynq_gem_regs *iobase;
 	phy_interface_t interface;
 	struct phy_device *phydev;
 	int phy_of_handle;
 	struct mii_dev *bus;
-#ifdef CONFIG_CLK_ZYNQMP
 	struct clk clk;
-#endif
 };
 
 static u32 phy_setup_op(struct zynq_gem_priv *priv, u32 phy_addr, u32 regnum,
@@ -195,7 +192,7 @@ static u32 phy_setup_op(struct zynq_gem_priv *priv, u32 phy_addr, u32 regnum,
 	int err;
 
 	err = wait_for_bit(__func__, &regs->nwsr, ZYNQ_GEM_NWSR_MDIOIDLE_MASK,
-			    true, 20000, true);
+			    true, 20000, false);
 	if (err)
 		return err;
 
@@ -208,7 +205,7 @@ static u32 phy_setup_op(struct zynq_gem_priv *priv, u32 phy_addr, u32 regnum,
 	writel(mgtcr, &regs->phymntnc);
 
 	err = wait_for_bit(__func__, &regs->nwsr, ZYNQ_GEM_NWSR_MDIOIDLE_MASK,
-			    true, 20000, true);
+			    true, 20000, false);
 	if (err)
 		return err;
 
@@ -410,10 +407,6 @@ static int zynq_gem_init(struct udevice *dev)
 		dummy_rx_bd->addr = ZYNQ_GEM_RXBUF_WRAP_MASK |
 				ZYNQ_GEM_RXBUF_NEW_MASK;
 		dummy_rx_bd->status = 0;
-		flush_dcache_range((ulong)&dummy_tx_bd, (ulong)&dummy_tx_bd +
-				   sizeof(dummy_tx_bd));
-		flush_dcache_range((ulong)&dummy_rx_bd, (ulong)&dummy_rx_bd +
-				   sizeof(dummy_rx_bd));
 
 		writel((ulong)dummy_tx_bd, &regs->transmit_q1_ptr);
 		writel((ulong)dummy_rx_bd, &regs->receive_q1_ptr);
@@ -457,16 +450,17 @@ static int zynq_gem_init(struct udevice *dev)
 		break;
 	}
 
-	/* Change the rclk and clk only not using EMIO interface */
-	if (!priv->emio)
-#ifndef CONFIG_CLK_ZYNQMP
-		zynq_slcr_gem_clk_setup((ulong)priv->iobase !=
-					ZYNQ_GEM_BASEADDR0, clk_rate);
-#else
-		ret = clk_set_rate(&priv->clk, clk_rate);
-		if (IS_ERR_VALUE(ret))
-			return -1;
-#endif
+	ret = clk_set_rate(&priv->clk, clk_rate);
+	if (IS_ERR_VALUE(ret) && ret != (unsigned long)-ENOSYS) {
+		dev_err(dev, "failed to set tx clock rate\n");
+		return ret;
+	}
+
+	ret = clk_enable(&priv->clk);
+	if (ret && ret != -ENOSYS) {
+		dev_err(dev, "failed to enable tx clock\n");
+		return ret;
+	}
 
 	setbits_le32(&regs->nwctrl, ZYNQ_GEM_NWCTRL_RXEN_MASK |
 					ZYNQ_GEM_NWCTRL_TXEN_MASK);
@@ -589,14 +583,12 @@ __weak int zynq_board_read_rom_ethaddr(unsigned char *ethaddr)
 
 static int zynq_gem_read_rom_mac(struct udevice *dev)
 {
-	int retval;
 	struct eth_pdata *pdata = dev_get_platdata(dev);
 
-	retval = zynq_board_read_rom_ethaddr(pdata->enetaddr);
-	if (retval == -ENOSYS)
-		retval = 0;
+	if (!pdata)
+		return -ENOSYS;
 
-	return retval;
+	return zynq_board_read_rom_ethaddr(pdata->enetaddr);
 }
 
 static int zynq_gem_miiphy_read(struct mii_dev *bus, int addr,
@@ -639,13 +631,11 @@ static int zynq_gem_probe(struct udevice *dev)
 	priv->tx_bd = (struct emac_bd *)bd_space;
 	priv->rx_bd = (struct emac_bd *)((ulong)bd_space + BD_SEPRN_SPACE);
 
-#ifdef CONFIG_CLK_ZYNQMP
 	ret = clk_get_by_name(dev, "tx_clk", &priv->clk);
 	if (ret < 0) {
 		dev_err(dev, "failed to get clock\n");
 		return -EINVAL;
 	}
-#endif
 
 	priv->bus = mdio_alloc();
 	priv->bus->read = zynq_gem_miiphy_read;
@@ -687,10 +677,9 @@ static int zynq_gem_ofdata_to_platdata(struct udevice *dev)
 	int node = dev_of_offset(dev);
 	const char *phy_mode;
 
-	pdata->iobase = (phys_addr_t)dev_get_addr(dev);
+	pdata->iobase = (phys_addr_t)devfdt_get_addr(dev);
 	priv->iobase = (struct zynq_gem_regs *)pdata->iobase;
 	/* Hardcode for now */
-	priv->emio = 0;
 	priv->phyaddr = -1;
 
 	priv->phy_of_handle = fdtdec_lookup_phandle(gd->fdt_blob, node,
@@ -707,8 +696,6 @@ static int zynq_gem_ofdata_to_platdata(struct udevice *dev)
 		return -EINVAL;
 	}
 	priv->interface = pdata->phy_interface;
-
-	priv->emio = fdtdec_get_bool(gd->fdt_blob, node, "xlnx,emio");
 
 	printf("ZYNQ GEM: %lx, phyaddr %x, interface %s\n", (ulong)priv->iobase,
 	       priv->phyaddr, phy_string_for_interface(priv->interface));

@@ -27,19 +27,11 @@
 #define CONFIG_SYS_MMC_ENV_PART 2
 
 /* USB Host support */
-#define CONFIG_USB_EHCI
 #define CONFIG_USB_EHCI_TEGRA
 
 /* USB networking support */
 #define CONFIG_USB_HOST_ETHER
 #define CONFIG_USB_ETHER_ASIX
-
-/* General networking support */
-
-/* USB keyboard */
-
-/* LCD support */
-#define CONFIG_SYS_WHITE_ON_BLACK
 
 #include "tegra-common-post.h"
 

@@ -100,7 +100,7 @@ struct us_data {
 	trans_cmnd	transport;		/* transport routine */
 };
 
-#ifdef CONFIG_USB_EHCI
+#ifdef CONFIG_USB_EHCI_HCD
 /*
  * The U-Boot EHCI driver can handle any transfer length as long as there is
  * enough free heap space left, but the SCSI READ(10) and WRITE(10) commands are
@@ -1440,10 +1440,8 @@ int usb_stor_get_info(struct usb_device *dev, struct us_data *ss,
 		       "   Request Sense returned %02X %02X %02X\n",
 		       pccb->sense_buf[2], pccb->sense_buf[12],
 		       pccb->sense_buf[13]);
-		if (dev_desc->removable == 1) {
+		if (dev_desc->removable == 1)
 			dev_desc->type = perq;
-			return 1;
-		}
 		return 0;
 	}
 	pccb->pdata = (unsigned char *)cap;

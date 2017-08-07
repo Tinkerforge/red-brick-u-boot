@@ -366,7 +366,6 @@
 #define CONFIG_HAS_FSL_DR_USB
 #define CONFIG_SYS_SCCR_USBDRCM		3
 
-#define CONFIG_USB_EHCI
 #define CONFIG_USB_EHCI_FSL
 #define CONFIG_USB_PHY_TYPE	"utmi"
 #define CONFIG_EHCI_HCD_INIT_AFTER_RESET
@@ -448,7 +447,6 @@
 /*
  * Command line configuration.
  */
-#define CONFIG_CMD_DATE
 #define CONFIG_CMD_PCI
 
 #define CONFIG_CMDLINE_EDITING	1	/* add command line history */
@@ -589,8 +587,6 @@
 #define CONFIG_HAS_ETH0
 #define CONFIG_HAS_ETH1
 #endif
-
-#define CONFIG_BAUDRATE 115200
 
 #define CONFIG_LOADADDR 800000	/* default location for tftp and bootm */
 

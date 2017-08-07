@@ -12,12 +12,10 @@
  * Command line configuration.
  */
 #define CONFIG_CMD_PCI
-#define CONFIG_CMD_IDE
 #define CONFIG_CMD_SH_ZIMAGEBOOT
 
 /* SCIF */
 #define CONFIG_SCIF_CONSOLE	1
-#define CONFIG_BAUDRATE		115200
 #define CONFIG_CONS_SCIF1	1
 
 #define CONFIG_BOOTARGS		"console=ttySC0,115200"

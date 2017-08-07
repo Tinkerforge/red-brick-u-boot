@@ -20,7 +20,6 @@
 
 /* U-Boot Commands */
 
-#define CONFIG_CMD_DATE
 #define CONFIG_CMD_NAND
 
 /* Memory configuration */
@@ -78,12 +77,6 @@
 #ifdef CONFIG_CMD_USB
 #define CONFIG_EHCI_MXS_PORT1
 #define CONFIG_USB_MAX_CONTROLLER_COUNT	1
-#endif
-
-/* RTC */
-#ifdef CONFIG_CMD_DATE
-#define CONFIG_RTC_PCF8563
-#define CONFIG_SYS_I2C_RTC_ADDR		0x51
 #endif
 
 /* Boot Linux */

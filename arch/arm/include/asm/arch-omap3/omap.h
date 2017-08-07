@@ -91,6 +91,9 @@ struct s32ktimer {
 	unsigned int s32k_cr;		/* 0x10 */
 };
 
+#define DEVICE_TYPE_SHIFT		0x8
+#define DEVICE_TYPE_MASK		(0x7 << DEVICE_TYPE_SHIFT)
+
 #endif /* __ASSEMBLY__ */
 
 #ifndef __ASSEMBLY__
@@ -243,6 +246,7 @@ struct gpio {
  * ROM code API related flags
  */
 #define OMAP3_GP_ROMCODE_API_L2_INVAL		1
+#define OMAP3_GP_ROMCODE_API_WRITE_L2ACR	2
 #define OMAP3_GP_ROMCODE_API_WRITE_ACR		3
 
 /*

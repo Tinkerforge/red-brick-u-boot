@@ -45,14 +45,6 @@
  * Hardware drivers
  */
 #define CONFIG_ATMEL_LEGACY
-#define CONFIG_AT91_GPIO		1
-#define CONFIG_AT91_GPIO_PULLUP		1
-
-/* serial console */
-#define CONFIG_ATMEL_USART
-#define CONFIG_USART_BASE		ATMEL_BASE_DBGU
-#define CONFIG_USART_ID			ATMEL_ID_SYS
-#define CONFIG_BAUDRATE			115200
 
 /* LCD */
 #define LCD_BPP				LCD_COLOR8
@@ -60,16 +52,8 @@
 #undef LCD_TEST_PATTERN
 #define CONFIG_LCD_INFO			1
 #define CONFIG_LCD_INFO_BELOW_LOGO	1
-#define CONFIG_SYS_WHITE_ON_BLACK	1
 #define CONFIG_ATMEL_LCD		1
 #define CONFIG_ATMEL_LCD_BGR555		1
-
-/* LED */
-#define CONFIG_AT91_LED
-#define	CONFIG_RED_LED		AT91_PIN_PB7	/* the power led */
-#define	CONFIG_GREEN_LED	AT91_PIN_PB8	/* the user1 led */
-#define	CONFIG_YELLOW_LED	AT91_PIN_PC29	/* the user2 led */
-
 
 /*
  * BOOTP options
@@ -90,7 +74,7 @@
 #define CONFIG_SYS_SDRAM_SIZE		0x04000000
 
 #define CONFIG_SYS_INIT_SP_ADDR \
-	(ATMEL_BASE_SRAM1 + 0x1000 - GENERATED_GBL_DATA_SIZE)
+	(ATMEL_BASE_SRAM1 + 16 * 1024 - GENERATED_GBL_DATA_SIZE)
 
 /* DataFlash */
 #define CONFIG_ATMEL_DATAFLASH_SPI
@@ -100,11 +84,6 @@
 #define AT91_SPI_CLK			15000000
 #define DATAFLASH_TCSS			(0x1a << 16)
 #define DATAFLASH_TCHS			(0x1 << 24)
-
-/* MMC */
-#ifdef CONFIG_CMD_MMC
-#define CONFIG_GENERIC_ATMEL_MCI
-#endif
 
 /* NOR flash, if populated */
 #ifdef CONFIG_SYS_USE_NORFLASH
@@ -251,9 +230,6 @@
 #endif
 
 /* Ethernet */
-#define CONFIG_MACB			1
-#define CONFIG_RMII			1
-#define CONFIG_NET_RETRY_COUNT		20
 #define CONFIG_RESET_PHY_R		1
 #define CONFIG_AT91_WANTS_COMMON_PHY
 
@@ -289,7 +265,7 @@
 
 /* bootstrap + u-boot + env + linux in nandflash */
 #define CONFIG_ENV_IS_IN_NAND		1
-#define CONFIG_ENV_OFFSET		0xc0000
+#define CONFIG_ENV_OFFSET		0x120000
 #define CONFIG_ENV_OFFSET_REDUND	0x100000
 #define CONFIG_ENV_SIZE		0x20000		/* 1 sector = 128 kB */
 #define CONFIG_BOOTCOMMAND	"nand read 0x22000000 0x200000 0x300000; bootm"

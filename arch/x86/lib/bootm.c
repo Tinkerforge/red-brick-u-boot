@@ -10,6 +10,8 @@
 
 #include <common.h>
 #include <command.h>
+#include <dm/device.h>
+#include <dm/root.h>
 #include <errno.h>
 #include <fdt_support.h>
 #include <image.h>
@@ -46,6 +48,13 @@ void bootm_announce_and_cleanup(void)
 #ifdef CONFIG_BOOTSTAGE_REPORT
 	bootstage_report();
 #endif
+
+	/*
+	 * Call remove function of all devices with a removal flag set.
+	 * This may be useful for last-stage operations, like cancelling
+	 * of DMA operation or releasing device internal buffers.
+	 */
+	dm_remove_devices_flags(DM_REMOVE_ACTIVE_ALL);
 }
 
 #if defined(CONFIG_OF_LIBFDT) && !defined(CONFIG_OF_NO_KERNEL)
@@ -100,7 +109,7 @@ static int boot_prep_linux(bootm_headers_t *images)
 		}
 		is_zimage = 1;
 #if defined(CONFIG_FIT)
-	} else if (images->fit_uname_os && is_zimage) {
+	} else if (images->fit_uname_os) {
 		ret = fit_image_get_data(images->fit_hdr_os,
 				images->fit_noffset_os,
 				(const void **)&data, &len);

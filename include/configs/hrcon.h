@@ -26,9 +26,6 @@
 #define CONFIG_FSL_ESDHC
 #define CONFIG_SYS_FSL_ESDHC_ADDR	CONFIG_SYS_MPC83xx_ESDHC_ADDR
 
-#define CONFIG_CMD_FPGAD
-#define CONFIG_CMD_IOLOOP
-
 /*
  * System Clock Setup
  */
@@ -595,8 +592,6 @@ void fpga_control_clear(unsigned int bus, int pin);
 #if defined(CONFIG_TSEC_ENET)
 #define CONFIG_HAS_ETH0
 #endif
-
-#define CONFIG_BAUDRATE 115200
 
 #define CONFIG_LOADADDR	800000	/* default location for tftp and bootm */
 

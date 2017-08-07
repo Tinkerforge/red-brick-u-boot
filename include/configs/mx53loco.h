@@ -10,8 +10,6 @@
 #ifndef __CONFIG_H
 #define __CONFIG_H
 
-#define CONFIG_MX53
-
 #define CONFIG_MACH_TYPE	MACH_TYPE_MX53_LOCO
 
 #include <asm/arch/imx-regs.h>
@@ -44,7 +42,6 @@
 #define CONFIG_FEC_MXC_PHYADDR	0x1F
 
 /* USB Configs */
-#define CONFIG_USB_EHCI
 #define CONFIG_USB_EHCI_MX5
 #define CONFIG_USB_HOST_ETHER
 #define CONFIG_USB_ETHER_ASIX
@@ -73,7 +70,6 @@
 /* allow to overwrite serial and ethaddr */
 #define CONFIG_ENV_OVERWRITE
 #define CONFIG_CONS_INDEX		1
-#define CONFIG_BAUDRATE			115200
 
 /* Command definition */
 #define CONFIG_SUPPORT_RAW_INITRD

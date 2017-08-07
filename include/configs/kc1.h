@@ -16,21 +16,12 @@
  * Build
  */
 
-#define CONFIG_SYS_THUMB_BUILD
-
 /*
  * CPU
  */
 
 #define CONFIG_SYS_L2_PL310		1
 #define CONFIG_SYS_PL310_BASE		0x48242000
-
-/*
- * Platform
- */
-
-#define CONFIG_OMAP
-#define CONFIG_OMAP4430
 
 /*
  * Board
@@ -61,12 +52,6 @@
 					 GENERATED_GBL_DATA_SIZE)
 
 #define CONFIG_SYS_MALLOC_LEN		(1024 * 1024 + CONFIG_ENV_SIZE)
-
-/*
- * GPIO
- */
-
-#define CONFIG_OMAP_GPIO
 
 /*
  * I2C
@@ -105,7 +90,6 @@
 #define CONFIG_SYS_SPL_MALLOC_SIZE	(1024 * 1024)
 
 #define CONFIG_SPL_LDSCRIPT		"arch/arm/mach-omap2/u-boot-spl.lds"
-#define CONFIG_SPL_BOARD_INIT
 
 /*
  * Console
@@ -130,7 +114,6 @@
 #define CONFIG_SYS_NS16550_COM3		UART3_BASE
 #define CONFIG_CONS_INDEX		3
 
-#define CONFIG_BAUDRATE			115200
 #define CONFIG_SYS_BAUDRATE_TABLE	{ 4800, 9600, 19200, 38400, 57600, \
 					  115200 }
 

@@ -25,6 +25,8 @@
 #include <asm/arch/davinci_misc.h>
 #include <linux/errno.h>
 #include <hwconfig.h>
+#include <asm/mach-types.h>
+#include <asm/setup.h>
 
 #ifdef CONFIG_MMC_DAVINCI
 #include <mmc.h>
@@ -145,9 +147,7 @@ int board_early_init_f(void)
 
 int board_init(void)
 {
-#ifndef CONFIG_USE_IRQ
 	irq_init();
-#endif
 
 	/* arch number of the board */
 	/* LEGO didn't register for a unique number and uses da850evm */

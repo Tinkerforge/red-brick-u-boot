@@ -35,8 +35,6 @@
 #define CONFIG_SYS_I2C_SPEED		100000
 
 /* USB Configs */
-#define CONFIG_USB_EHCI
-#define CONFIG_USB_EHCI_MX6
 #define CONFIG_USB_HOST_ETHER
 #define CONFIG_USB_ETHER_ASIX
 #define CONFIG_USB_MAX_CONTROLLER_COUNT 2
@@ -65,8 +63,6 @@
 #define CONFIG_SF_DEFAULT_MODE		SPI_MODE_0
 #endif
 
-#define CONFIG_CMD_BMODE
-
 #define CONFIG_ARP_TIMEOUT     200UL
 
 /* Print Buffer Size */
@@ -75,8 +71,6 @@
 #define CONFIG_SYS_MEMTEST_START       0x10000000
 #define CONFIG_SYS_MEMTEST_END         0x10010000
 #define CONFIG_SYS_MEMTEST_SCRATCH     0x10800000
-
-#define CONFIG_STACKSIZE               (128 * 1024)
 
 /* Physical Memory Map */
 #define CONFIG_NR_DRAM_BANKS           1

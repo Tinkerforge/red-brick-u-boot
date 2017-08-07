@@ -10,11 +10,6 @@
 #include <linux/sizes.h>
 
 /*
- *  CPU configuration
- */
-#define CONFIG_SYS_TIMER_RATE		CONFIG_SYS_CLK_FREQ
-
-/*
  * Memory configuration
  */
 #define CONFIG_SYS_MONITOR_BASE		CONFIG_SYS_TEXT_BASE
@@ -35,7 +30,6 @@
  */
 #define CONFIG_SYS_NS16550_SERIAL
 #define CONFIG_SYS_NS16550_CLK		166666666
-#define CONFIG_BAUDRATE			115200
 
 /*
  * Ethernet PHY configuration
@@ -66,6 +60,7 @@
 
 #define CONFIG_AUTO_COMPLETE
 #define CONFIG_SYS_MAXARGS		16
+#define CONFIG_CMDLINE_EDITING
 
 /*
  * Environment settings

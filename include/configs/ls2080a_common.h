@@ -1,4 +1,5 @@
 /*
+ * Copyright 2017 NXP
  * Copyright (C) 2014 Freescale Semiconductor
  *
  * SPDX-License-Identifier:	GPL-2.0+
@@ -13,7 +14,7 @@
 #define CONFIG_GICV3
 #define CONFIG_FSL_TZPC_BP147
 
-#include <asm/arch/ls2080a_stream_id.h>
+#include <asm/arch/stream_id_lsch3.h>
 #include <asm/arch/config.h>
 
 /* Link Definitions */
@@ -28,6 +29,12 @@
 #else
 #define CONFIG_SYS_TEXT_BASE		0x30100000
 #endif
+#else
+#define CONFIG_SYS_TEXT_BASE		0x20100000
+#define CONFIG_ENV_IS_IN_SPI_FLASH
+#define CONFIG_ENV_SIZE			0x2000          /* 8KB */
+#define CONFIG_ENV_OFFSET		0x300000        /* 3MB */
+#define CONFIG_ENV_SECT_SIZE		0x10000
 #endif
 
 #define CONFIG_SUPPORT_RAW_INITRD
@@ -91,7 +98,6 @@
 #define CONFIG_SYS_NS16550_REG_SIZE     1
 #define CONFIG_SYS_NS16550_CLK          (get_serial_clock())
 
-#define CONFIG_BAUDRATE			115200
 #define CONFIG_SYS_BAUDRATE_TABLE	{ 9600, 19200, 38400, 57600, 115200 }
 
 /* IFC */
@@ -141,7 +147,6 @@ unsigned long long get_qixis_addr(void);
 #define CONFIG_SYS_NAND_BASE_PHYS		0x30000000
 
 /* MC firmware */
-#define CONFIG_FSL_MC_ENET
 /* TODO Actual DPL max length needs to be confirmed with the MC FW team */
 #define CONFIG_SYS_LS_MC_DPC_MAX_LENGTH	    0x20000
 #define CONFIG_SYS_LS_MC_DRAM_DPC_OFFSET    0x00F00000
@@ -151,6 +156,11 @@ unsigned long long get_qixis_addr(void);
 #define CONFIG_SYS_LS_MC_AIOP_IMG_MAX_LENGTH	0x200000
 #define CONFIG_SYS_LS_MC_DRAM_AIOP_IMG_OFFSET	0x07000000
 
+/* Define phy_reset function to boot the MC based on mcinitcmd.
+ * This happens late enough to properly fixup u-boot env MAC addresses.
+ */
+#define CONFIG_RESET_PHY_R
+
 /*
  * Carve out a DDR region which will not be used by u-boot/Linux
  *
@@ -159,11 +169,9 @@ unsigned long long get_qixis_addr(void);
  */
 #ifdef CONFIG_FSL_MC_ENET
 #define CONFIG_SYS_LS_MC_DRAM_BLOCK_MIN_SIZE		(512UL * 1024 * 1024)
-#define CONFIG_SYS_MC_RSV_MEM_ALIGN			(512UL * 1024 * 1024)
 #endif
 
 /* Command line configuration */
-#define CONFIG_CMD_ENV
 
 /* Miscellaneous configurable options */
 #define CONFIG_SYS_LOAD_ADDR	(CONFIG_SYS_DDR_SDRAM_BASE + 0x10000000)
@@ -189,20 +197,27 @@ unsigned long long get_qixis_addr(void);
 	"ramdisk_size=0x2000000\0"		\
 	"fdt_high=0xa0000000\0"			\
 	"initrd_high=0xffffffffffffffff\0"	\
-	"kernel_start=0x581200000\0"		\
+	"kernel_start=0x581000000\0"		\
 	"kernel_load=0xa0000000\0"		\
 	"kernel_size=0x2800000\0"		\
 	"console=ttyAMA0,38400n8\0"		\
-	"mcinitcmd=fsl_mc start mc 0x580300000"	\
-	" 0x580800000 \0"
+	"mcinitcmd=fsl_mc start mc 0x580a00000"	\
+	" 0x580e00000 \0"
 
 #define CONFIG_BOOTARGS		"console=ttyS0,115200 root=/dev/ram0 " \
 				"earlycon=uart8250,mmio,0x21c0500 " \
 				"ramdisk_size=0x2000000 default_hugepagesz=2m" \
 				" hugepagesz=2m hugepages=256"
-#define CONFIG_BOOTCOMMAND	"fsl_mc apply dpl 0x580700000 &&" \
+#ifdef CONFIG_SD_BOOT
+#define CONFIG_BOOTCOMMAND	"mmc read 0x80200000 0x6800 0x800;"\
+				" fsl_mc apply dpl 0x80200000 &&" \
+				" mmc read $kernel_load $kernel_start" \
+				" $kernel_size && bootm $kernel_load"
+#else
+#define CONFIG_BOOTCOMMAND	"fsl_mc apply dpl 0x580d00000 &&" \
 				" cp.b $kernel_start $kernel_load" \
 				" $kernel_size && bootm $kernel_load"
+#endif
 
 /* Monitor Command Prompt */
 #define CONFIG_SYS_CBSIZE		512	/* Console I/O Buffer Size */
@@ -225,18 +240,16 @@ unsigned long long get_qixis_addr(void);
 #define CONFIG_SPL_TARGET		"u-boot-with-spl.bin"
 #define CONFIG_SPL_TEXT_BASE		0x1800a000
 
+#ifdef CONFIG_NAND_BOOT
 #define CONFIG_SYS_NAND_U_BOOT_DST	0x80400000
 #define CONFIG_SYS_NAND_U_BOOT_START	CONFIG_SYS_NAND_U_BOOT_DST
+#endif
 #define CONFIG_SYS_SPL_MALLOC_SIZE	0x00100000
 #define CONFIG_SYS_SPL_MALLOC_START	0x80200000
 #define CONFIG_SYS_MONITOR_LEN		(640 * 1024)
 
 #define CONFIG_SYS_BOOTM_LEN   (64 << 20)      /* Increase max gunzip size */
 
-/* Hash command with SHA acceleration supported in hardware */
-#ifdef CONFIG_FSL_CAAM
-#define CONFIG_CMD_HASH
-#define CONFIG_SHA_HW_ACCEL
-#endif
+#include <asm/arch/soc.h>
 
 #endif /* __LS2_COMMON_H */

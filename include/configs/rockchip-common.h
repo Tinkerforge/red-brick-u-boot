@@ -12,11 +12,20 @@
 #include <config_distro_defaults.h>
 
 /* First try to boot from SD (index 0), then eMMC (index 1 */
+#ifdef CONFIG_CMD_USB
+#define BOOT_TARGET_DEVICES(func) \
+	func(MMC, mmc, 0) \
+	func(MMC, mmc, 1) \
+	func(USB, usb, 0) \
+	func(PXE, pxe, na) \
+	func(DHCP, dchp, na)
+#else
 #define BOOT_TARGET_DEVICES(func) \
 	func(MMC, mmc, 0) \
 	func(MMC, mmc, 1) \
 	func(PXE, pxe, na) \
 	func(DHCP, dchp, na)
+#endif
 
 #define CONFIG_RANDOM_UUID
 #define PARTS_DEFAULT \
@@ -44,5 +53,7 @@
  */
 #define CONFIG_ENV_OFFSET (96 * 1024)
 #endif
+
+#define CONFIG_DISPLAY_BOARDINFO_LATE
 
 #endif /* _ROCKCHIP_COMMON_H_ */

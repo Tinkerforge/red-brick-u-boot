@@ -10,9 +10,46 @@
 
 #include <common.h>
 #include <asm/omap_common.h>
+#include <dm/uclass.h>
 #include <i2c.h>
 
 #include "board_detect.h"
+
+#if defined(CONFIG_DM_I2C_COMPAT)
+/**
+ * ti_i2c_set_alen - Set chip's i2c address length
+ * @bus_addr - I2C bus number
+ * @dev_addr - I2C eeprom id
+ * @alen     - I2C address length in bytes
+ *
+ * DM_I2C by default sets the address length to be used to 1. This
+ * function allows this address length to be changed to match the
+ * eeprom used for board detection.
+ */
+int __maybe_unused ti_i2c_set_alen(int bus_addr, int dev_addr, int alen)
+{
+	struct udevice *dev;
+	struct udevice *bus;
+	int rc;
+
+	rc = uclass_get_device_by_seq(UCLASS_I2C, bus_addr, &bus);
+	if (rc)
+		return rc;
+	rc = i2c_get_chip(bus, dev_addr, 1, &dev);
+	if (rc)
+		return rc;
+	rc = i2c_set_chip_offset_len(dev, alen);
+	if (rc)
+		return rc;
+
+	return 0;
+}
+#else
+int __maybe_unused ti_i2c_set_alen(int bus_addr, int dev_addr, int alen)
+{
+	return 0;
+}
+#endif
 
 /**
  * ti_i2c_eeprom_init - Initialize an i2c bus and probe for a device
@@ -46,7 +83,17 @@ static int __maybe_unused ti_i2c_eeprom_init(int i2c_bus, int dev_addr)
 static int __maybe_unused ti_i2c_eeprom_read(int dev_addr, int offset,
 					     uchar *ep, int epsize)
 {
-	return i2c_read(dev_addr, offset, 2, ep, epsize);
+	int bus_num, rc, alen;
+
+	bus_num = i2c_get_bus_num();
+
+	alen = 2;
+
+	rc = ti_i2c_set_alen(bus_num, dev_addr, alen);
+	if (rc)
+		return rc;
+
+	return i2c_read(dev_addr, offset, alen, ep, epsize);
 }
 
 /**
@@ -88,6 +135,11 @@ static int __maybe_unused ti_i2c_eeprom_get(int bus_addr, int dev_addr,
 	 * Read the header first then only read the other contents.
 	 */
 	byte = 2;
+
+	rc = ti_i2c_set_alen(bus_addr, dev_addr, byte);
+	if (rc)
+		return rc;
+
 	rc = i2c_read(dev_addr, 0x0, byte, (uint8_t *)&hdr_read, 4);
 	if (rc)
 		return rc;
@@ -100,9 +152,14 @@ static int __maybe_unused ti_i2c_eeprom_get(int bus_addr, int dev_addr,
 		 * 1 byte address (some legacy boards need this..)
 		 */
 		byte = 1;
-		if (rc)
+		if (rc) {
+			rc = ti_i2c_set_alen(bus_addr, dev_addr, byte);
+			if (rc)
+				return rc;
+
 			rc = i2c_read(dev_addr, 0x0, byte, (uint8_t *)&hdr_read,
 				      4);
+		}
 		if (rc)
 			return rc;
 	}
@@ -313,4 +370,66 @@ void __maybe_unused set_board_info_env(char *name)
 		setenv("board_serial", ep->serial);
 	else
 		setenv("board_serial", unknown);
+}
+
+static u64 mac_to_u64(u8 mac[6])
+{
+	int i;
+	u64 addr = 0;
+
+	for (i = 0; i < 6; i++) {
+		addr <<= 8;
+		addr |= mac[i];
+	}
+
+	return addr;
+}
+
+static void u64_to_mac(u64 addr, u8 mac[6])
+{
+	mac[5] = addr;
+	mac[4] = addr >> 8;
+	mac[3] = addr >> 16;
+	mac[2] = addr >> 24;
+	mac[1] = addr >> 32;
+	mac[0] = addr >> 40;
+}
+
+void board_ti_set_ethaddr(int index)
+{
+	uint8_t mac_addr[6];
+	int i;
+	u64 mac1, mac2;
+	u8 mac_addr1[6], mac_addr2[6];
+	int num_macs;
+	/*
+	 * Export any Ethernet MAC addresses from EEPROM.
+	 * The 2 MAC addresses in EEPROM define the address range.
+	 */
+	board_ti_get_eth_mac_addr(0, mac_addr1);
+	board_ti_get_eth_mac_addr(1, mac_addr2);
+
+	if (is_valid_ethaddr(mac_addr1) && is_valid_ethaddr(mac_addr2)) {
+		mac1 = mac_to_u64(mac_addr1);
+		mac2 = mac_to_u64(mac_addr2);
+
+		/* must contain an address range */
+		num_macs = mac2 - mac1 + 1;
+		if (num_macs <= 0)
+			return;
+
+		if (num_macs > 50) {
+			printf("%s: Too many MAC addresses: %d. Limiting to 50\n",
+			       __func__, num_macs);
+			num_macs = 50;
+		}
+
+		for (i = 0; i < num_macs; i++) {
+			u64_to_mac(mac1 + i, mac_addr);
+			if (is_valid_ethaddr(mac_addr)) {
+				eth_setenv_enetaddr_by_index("eth", i + index,
+							     mac_addr);
+			}
+		}
+	}
 }

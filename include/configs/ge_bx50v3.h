@@ -47,7 +47,6 @@
 #define CONFIG_MXC_GPIO
 #define CONFIG_MXC_UART
 
-#define CONFIG_CMD_FUSE
 #define CONFIG_MXC_OCOTP
 
 /* SATA Configs */
@@ -68,8 +67,6 @@
 
 /* USB Configs */
 #ifdef CONFIG_USB
-#define CONFIG_USB_EHCI
-#define CONFIG_USB_EHCI_MX6
 #define CONFIG_USB_MAX_CONTROLLER_COUNT 2
 #define CONFIG_EHCI_HCD_INIT_AFTER_RESET
 #define CONFIG_MXC_USB_PORTSC	(PORT_PTS_UTMI | PORT_PTS_PTW)
@@ -113,10 +110,6 @@
 /* allow to overwrite serial and ethaddr */
 #define CONFIG_ENV_OVERWRITE
 #define CONFIG_CONS_INDEX	1
-#define CONFIG_BAUDRATE	115200
-
-/* Command definition */
-#define CONFIG_CMD_BMODE
 
 #define CONFIG_LOADADDR	0x12000000
 #define CONFIG_SYS_TEXT_BASE	0x17800000
@@ -261,7 +254,6 @@
 #define CONFIG_SYS_LOAD_ADDR           CONFIG_LOADADDR
 
 #define CONFIG_CMDLINE_EDITING
-#define CONFIG_STACKSIZE               (128 * 1024)
 
 /* Physical Memory Map */
 #define CONFIG_NR_DRAM_BANKS           1

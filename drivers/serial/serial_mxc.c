@@ -353,7 +353,7 @@ static int mxc_serial_ofdata_to_platdata(struct udevice *dev)
 	struct mxc_serial_platdata *plat = dev->platdata;
 	fdt_addr_t addr;
 
-	addr = dev_get_addr(dev);
+	addr = devfdt_get_addr(dev);
 	if (addr == FDT_ADDR_T_NONE)
 		return -EINVAL;
 
@@ -365,6 +365,7 @@ static int mxc_serial_ofdata_to_platdata(struct udevice *dev)
 }
 
 static const struct udevice_id mxc_serial_ids[] = {
+	{ .compatible = "fsl,imx6ul-uart" },
 	{ .compatible = "fsl,imx7d-uart" },
 	{ }
 };

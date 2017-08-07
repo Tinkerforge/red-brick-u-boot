@@ -1,4 +1,5 @@
 /*
+ * Copyright 2017 NXP
  * Copyright 2014-2015, Freescale Semiconductor
  *
  * SPDX-License-Identifier:	GPL-2.0+
@@ -15,6 +16,8 @@ static struct cpu_type cpu_type_list[] = {
 	CPU_TYPE_ENTRY(LS2084A, LS2084A, 8),
 	CPU_TYPE_ENTRY(LS2048A, LS2048A, 4),
 	CPU_TYPE_ENTRY(LS2044A, LS2044A, 4),
+	CPU_TYPE_ENTRY(LS2081A, LS2081A, 8),
+	CPU_TYPE_ENTRY(LS2041A, LS2041A, 4),
 	CPU_TYPE_ENTRY(LS1043A, LS1043A, 4),
 	CPU_TYPE_ENTRY(LS1023A, LS1023A, 2),
 	CPU_TYPE_ENTRY(LS1046A, LS1046A, 4),
@@ -115,7 +118,11 @@ static struct mm_region early_map[] = {
 	},
 	{ CONFIG_SYS_FSL_DRAM_BASE1, CONFIG_SYS_FSL_DRAM_BASE1,
 	  CONFIG_SYS_FSL_DRAM_SIZE1,
+#if defined(CONFIG_SPL) && !defined(CONFIG_SPL_BUILD)
 	  PTE_BLOCK_MEMTYPE(MT_NORMAL) |
+#else	/* Start with nGnRnE and PXN and UXN to prevent speculative access */
+	  PTE_BLOCK_MEMTYPE(MT_DEVICE_NGNRNE) | PTE_BLOCK_PXN | PTE_BLOCK_UXN |
+#endif
 	  PTE_BLOCK_OUTER_SHARE | PTE_BLOCK_NS
 	},
 	/* Map IFC region #2 up to CONFIG_SYS_FLASH_BASE for NAND boot */
@@ -130,7 +137,7 @@ static struct mm_region early_map[] = {
 	},
 	{ CONFIG_SYS_FSL_DRAM_BASE2, CONFIG_SYS_FSL_DRAM_BASE2,
 	  CONFIG_SYS_FSL_DRAM_SIZE2,
-	  PTE_BLOCK_MEMTYPE(MT_NORMAL) |
+	  PTE_BLOCK_MEMTYPE(MT_DEVICE_NGNRNE) | PTE_BLOCK_PXN | PTE_BLOCK_UXN |
 	  PTE_BLOCK_OUTER_SHARE | PTE_BLOCK_NS
 	},
 #elif defined(CONFIG_FSL_LSCH2)
@@ -158,12 +165,16 @@ static struct mm_region early_map[] = {
 	},
 	{ CONFIG_SYS_FSL_DRAM_BASE1, CONFIG_SYS_FSL_DRAM_BASE1,
 	  CONFIG_SYS_FSL_DRAM_SIZE1,
+#if defined(CONFIG_SPL) && !defined(CONFIG_SPL_BUILD)
 	  PTE_BLOCK_MEMTYPE(MT_NORMAL) |
+#else	/* Start with nGnRnE and PXN and UXN to prevent speculative access */
+	  PTE_BLOCK_MEMTYPE(MT_DEVICE_NGNRNE) | PTE_BLOCK_PXN | PTE_BLOCK_UXN |
+#endif
 	  PTE_BLOCK_OUTER_SHARE | PTE_BLOCK_NS
 	},
 	{ CONFIG_SYS_FSL_DRAM_BASE2, CONFIG_SYS_FSL_DRAM_BASE2,
 	  CONFIG_SYS_FSL_DRAM_SIZE2,
-	  PTE_BLOCK_MEMTYPE(MT_NORMAL) |
+	  PTE_BLOCK_MEMTYPE(MT_DEVICE_NGNRNE) | PTE_BLOCK_PXN | PTE_BLOCK_UXN |
 	  PTE_BLOCK_OUTER_SHARE | PTE_BLOCK_NS
 	},
 #endif
@@ -241,7 +252,7 @@ static struct mm_region final_map[] = {
 	  PTE_BLOCK_MEMTYPE(MT_DEVICE_NGNRNE) |
 	  PTE_BLOCK_NON_SHARE | PTE_BLOCK_PXN | PTE_BLOCK_UXN
 	},
-#ifdef CONFIG_LS2080A
+#ifdef CONFIG_ARCH_LS2080A
 	{ CONFIG_SYS_PCIE4_PHYS_ADDR, CONFIG_SYS_PCIE4_PHYS_ADDR,
 	  CONFIG_SYS_PCIE4_PHYS_SIZE,
 	  PTE_BLOCK_MEMTYPE(MT_DEVICE_NGNRNE) |
@@ -342,4 +353,5 @@ static struct mm_region final_map[] = {
 
 int fsl_qoriq_core_to_cluster(unsigned int core);
 u32 cpu_mask(void);
+
 #endif /* _FSL_LAYERSCAPE_CPU_H */

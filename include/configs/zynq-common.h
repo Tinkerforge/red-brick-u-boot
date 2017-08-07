@@ -28,7 +28,6 @@
 #define CONFIG_SYS_TIMER_COUNTER	(CONFIG_SYS_TIMERBASE + 0x4)
 
 /* Serial drivers */
-#define CONFIG_BAUDRATE		115200
 /* The following table includes the supported baudrates */
 #define CONFIG_SYS_BAUDRATE_TABLE  \
 	{300, 600, 1200, 2400, 4800, 9600, 19200, 38400, 57600, 115200, 230400}
@@ -130,7 +129,6 @@
 
 #if defined(CONFIG_MMC_SDHCI_ZYNQ) || defined(CONFIG_ZYNQ_USB)
 # define CONFIG_SUPPORT_VFAT
-# define CONFIG_FAT_WRITE
 #endif
 
 #if defined(CONFIG_ZYNQ_I2C0) || defined(CONFIG_ZYNQ_I2C1)
@@ -146,7 +144,6 @@
 
 /* EEPROM */
 #ifdef CONFIG_ZYNQ_EEPROM
-# define CONFIG_CMD_EEPROM
 # define CONFIG_SYS_I2C_EEPROM_ADDR_LEN		1
 # define CONFIG_SYS_I2C_EEPROM_ADDR		0x54
 # define CONFIG_SYS_EEPROM_PAGE_WRITE_BITS	4
@@ -237,7 +234,6 @@
 #define CONFIG_AUTO_COMPLETE
 #define CONFIG_SYS_LONGHELP
 #define CONFIG_CLOCKS
-#define CONFIG_CMD_CLK
 #define CONFIG_SYS_MAXARGS		32 /* max number of command args */
 #define CONFIG_SYS_CBSIZE		256 /* Console I/O Buffer Size */
 #define CONFIG_SYS_PBSIZE		(CONFIG_SYS_CBSIZE + \
@@ -262,10 +258,6 @@
 #define CONFIG_FPGA
 #define CONFIG_FPGA_XILINX
 #define CONFIG_FPGA_ZYNQPL
-#define CONFIG_CMD_FPGA_LOADMK
-#define CONFIG_CMD_FPGA_LOADP
-#define CONFIG_CMD_FPGA_LOADBP
-#define CONFIG_CMD_FPGA_LOADFS
 
 /* FIT support */
 #define CONFIG_IMAGE_FORMAT_LEGACY /* enable also legacy image format */
@@ -286,7 +278,6 @@
 /* SPL part */
 #define CONFIG_CMD_SPL
 #define CONFIG_SPL_FRAMEWORK
-#define CONFIG_SPL_BOARD_INIT
 
 #define CONFIG_SPL_LDSCRIPT	"arch/arm/mach-zynq/u-boot-spl.lds"
 

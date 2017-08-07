@@ -155,6 +155,14 @@ enum fdt_compat_id {
 	COMPAT_INTEL_BAYTRAIL_FSP_MDP,	/* Intel FSP memory-down params */
 	COMPAT_INTEL_IVYBRIDGE_FSP,	/* Intel Ivy Bridge FSP */
 	COMPAT_SUNXI_NAND,		/* SUNXI NAND controller */
+	COMPAT_ALTERA_SOCFPGA_CLK,	/* SoCFPGA Clock initialization */
+	COMPAT_ALTERA_SOCFPGA_PINCTRL_SINGLE,	/* SoCFPGA pinctrl-single */
+	COMPAT_ALTERA_SOCFPGA_H2F_BRG,          /* SoCFPGA hps2fpga bridge */
+	COMPAT_ALTERA_SOCFPGA_LWH2F_BRG,        /* SoCFPGA lwhps2fpga bridge */
+	COMPAT_ALTERA_SOCFPGA_F2H_BRG,          /* SoCFPGA fpga2hps bridge */
+	COMPAT_ALTERA_SOCFPGA_F2SDR0,           /* SoCFPGA fpga2SDRAM0 bridge */
+	COMPAT_ALTERA_SOCFPGA_F2SDR1,           /* SoCFPGA fpga2SDRAM1 bridge */
+	COMPAT_ALTERA_SOCFPGA_F2SDR2,           /* SoCFPGA fpga2SDRAM2 bridge */
 
 	COMPAT_COUNT,
 };
@@ -807,40 +815,6 @@ const u8 *fdtdec_locate_byte_array(const void *blob, int node,
 int fdtdec_decode_region(const void *blob, int node, const char *prop_name,
 			 fdt_addr_t *basep, fdt_size_t *sizep);
 
-enum fmap_compress_t {
-	FMAP_COMPRESS_NONE,
-	FMAP_COMPRESS_LZO,
-};
-
-enum fmap_hash_t {
-	FMAP_HASH_NONE,
-	FMAP_HASH_SHA1,
-	FMAP_HASH_SHA256,
-};
-
-/* A flash map entry, containing an offset and length */
-struct fmap_entry {
-	uint32_t offset;
-	uint32_t length;
-	uint32_t used;			/* Number of bytes used in region */
-	enum fmap_compress_t compress_algo;	/* Compression type */
-	enum fmap_hash_t hash_algo;		/* Hash algorithm */
-	const uint8_t *hash;			/* Hash value */
-	int hash_size;				/* Hash size */
-};
-
-/**
- * Read a flash entry from the fdt
- *
- * @param blob		FDT blob
- * @param node		Offset of node to read
- * @param name		Name of node being read
- * @param entry		Place to put offset and size of this node
- * @return 0 if ok, -ve on error
- */
-int fdtdec_read_fmap_entry(const void *blob, int node, const char *name,
-			   struct fmap_entry *entry);
-
 /**
  * Obtain an indexed resource from a device property.
  *
@@ -959,6 +933,7 @@ struct display_timing {
 	struct timing_entry vsync_len;		/* ver. sync len */
 
 	enum display_flags flags;		/* display flags */
+	bool hdmi_monitor;			/* is hdmi monitor? */
 };
 
 /**
@@ -1014,5 +989,11 @@ int fdtdec_setup_memory_banksize(void);
  * Set up the device tree ready for use
  */
 int fdtdec_setup(void);
+
+/**
+ * Board-specific FDT initialization. Returns the address to a device tree blob.
+ * Called when CONFIG_OF_BOARD is defined.
+ */
+void *board_fdt_blob_setup(void);
 
 #endif

@@ -43,7 +43,6 @@
 #define CONFIG_AT91_GPIO_PULLUP	1	/* keep pullups on peripheral pins */
 
 /* serial console */
-#define CONFIG_ATMEL_USART
 #define CONFIG_USART_BASE		ATMEL_BASE_DBGU
 #define CONFIG_USART_ID			ATMEL_ID_SYS
 
@@ -72,7 +71,7 @@
 #define CONFIG_SYS_SDRAM_SIZE		0x08000000
 
 #define CONFIG_SYS_INIT_SP_ADDR \
-	(CONFIG_SYS_SDRAM_BASE + SZ_4K - GENERATED_GBL_DATA_SIZE)
+	(CONFIG_SYS_SDRAM_BASE + SZ_32K - GENERATED_GBL_DATA_SIZE)
 
 /* NAND flash */
 #ifdef CONFIG_CMD_NAND
@@ -96,8 +95,6 @@
 #define CONFIG_AT91_WANTS_COMMON_PHY
 
 /* USB */
-#define CONFIG_USB_EHCI
-#define CONFIG_USB_EHCI_ATMEL
 #define CONFIG_SYS_USB_EHCI_MAX_ROOT_PORTS	2
 
 /* USB DFU support */
@@ -127,8 +124,6 @@
 	"512k(dtb),6M(kernel)ro,-(rootfs) "				\
 	"root=/dev/mtdblock7 rw rootfstype=jffs2"
 
-#define CONFIG_BAUDRATE			115200
-
 #define CONFIG_SYS_CBSIZE		256
 #define CONFIG_SYS_MAXARGS		16
 #define CONFIG_SYS_PBSIZE	(CONFIG_SYS_CBSIZE +	\
@@ -152,7 +147,6 @@
 #define CONFIG_SPL_BSS_START_ADDR	CONFIG_SPL_MAX_SIZE
 #define CONFIG_SPL_BSS_MAX_SIZE		(SZ_2K)
 
-#define CONFIG_SPL_BOARD_INIT
 #define CONFIG_SPL_NAND_DRIVERS
 #define CONFIG_SPL_NAND_BASE
 #define CONFIG_SPL_NAND_ECC

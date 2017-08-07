@@ -114,9 +114,6 @@
 #define CONFIG_PL01x_PORTS		{ (void *)MXS_UARTDBG_BASE }
 #define CONFIG_CONS_INDEX		0
 /* Default baudrate can be overridden by board! */
-#ifndef CONFIG_BAUDRATE
-#define CONFIG_BAUDRATE			115200
-#endif
 
 /* FEC Ethernet on SoC */
 #ifdef CONFIG_FEC_MXC
@@ -126,16 +123,6 @@
 #endif
 #ifndef CONFIG_FEC_XCV_TYPE
 #define CONFIG_FEC_XCV_TYPE		RMII
-#endif
-#endif
-
-/* I2C */
-#ifdef CONFIG_CMD_I2C
-#define CONFIG_SYS_I2C
-#define CONFIG_SYS_I2C_MXS
-#define CONFIG_HARD_I2C
-#ifndef CONFIG_SYS_I2C_SPEED
-#define CONFIG_SYS_I2C_SPEED		400000
 #endif
 #endif
 
@@ -171,7 +158,6 @@
 
 /* USB */
 #ifdef CONFIG_CMD_USB
-#define CONFIG_USB_EHCI
 #define CONFIG_USB_EHCI_MXS
 #define CONFIG_EHCI_IS_TDI
 #endif

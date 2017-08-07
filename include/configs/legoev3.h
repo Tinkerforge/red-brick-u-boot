@@ -122,7 +122,6 @@
 #define CONFIG_SYS_NS16550_COM1	DAVINCI_UART1_BASE /* Base address of UART1 */
 #define CONFIG_SYS_NS16550_CLK	clk_get(DAVINCI_UART2_CLKID)
 #define CONFIG_CONS_INDEX	1		/* use UART0 for console */
-#define CONFIG_BAUDRATE		115200		/* Default baud rate */
 
 #define CONFIG_SPI
 #define CONFIG_DAVINCI_SPI
@@ -151,7 +150,6 @@
 #define CONFIG_AUTO_COMPLETE
 #define CONFIG_CMDLINE_EDITING
 #define CONFIG_SYS_LONGHELP
-#define CONFIG_CRC32_VERIFY
 #define CONFIG_MX_CYCLIC
 
 /*
@@ -202,7 +200,6 @@
 /*
  * U-Boot commands
  */
-#define CONFIG_CMD_DIAG
 #define CONFIG_CMD_SAVES
 
 #ifdef CONFIG_CMD_BDI
@@ -216,5 +213,7 @@
 #define CONFIG_SYS_SDRAM_BASE		0xc0000000
 
 #define CONFIG_SYS_INIT_SP_ADDR		0x80010000
+
+#include <asm/arch/hardware.h>
 
 #endif /* __CONFIG_H */

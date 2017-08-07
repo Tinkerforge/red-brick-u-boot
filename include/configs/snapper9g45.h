@@ -61,8 +61,6 @@
 #define CONFIG_TFTP_TSIZE
 
 /* USB */
-#define CONFIG_USB_EHCI
-#define CONFIG_USB_EHCI_ATMEL
 #define CONFIG_SYS_USB_EHCI_MAX_ROOT_PORTS	2
 
 /* MMC */
@@ -81,7 +79,6 @@
 
 /* UARTs/Serial console */
 #define CONFIG_ATMEL_USART
-#define CONFIG_BAUDRATE			115200
 
 /* Boot options */
 #define CONFIG_SYS_LOAD_ADDR		0x23000000
@@ -132,7 +129,6 @@
 /* Command line configuration */
 #define CONFIG_CMD_PING
 #define CONFIG_CMD_DHCP
-#define CONFIG_CMD_FAT
 #define CONFIG_CMD_USB
 #define CONFIG_CMD_MII
 #define CONFIG_CMD_MMC

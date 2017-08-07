@@ -72,7 +72,6 @@
 /* Allow to overwrite serial and ethaddr */
 #define CONFIG_ENV_OVERWRITE
 #define CONFIG_SYS_UART_PORT		(1)
-#define CONFIG_BAUDRATE				115200
 
 #undef CONFIG_CMD_IMLS
 
@@ -98,16 +97,6 @@
 #define CONFIG_PHY_MICREL
 #endif
 
-#if 0				/* Disable until the I2C driver will be updated */
-
-/* I2C Configs */
-#define CONFIG_CMD_I2C
-#define CONFIG_HARD_I2C
-#define CONFIG_I2C_MXC
-#define CONFIG_SYS_I2C_BASE		I2C0_BASE_ADDR
-#define CONFIG_SYS_I2C_SPEED		100000
-#endif
-
 #if 0				/* Disable until the FLASH will be implemented */
 #define CONFIG_SYS_USE_NAND
 #endif
@@ -128,7 +117,6 @@
 #define CONFIG_LOADADDR			0xC307FFC0
 #define CONFIG_BOOTARGS			"console=ttyLF0 root=/dev/ram rw"
 
-#define CONFIG_CMD_ENV
 #define CONFIG_EXTRA_ENV_SETTINGS \
 	"boot_scripts=boot.scr.uimg boot.scr\0" \
 	"scriptaddr=" __stringify(CONFIG_LOADADDR) "\0" \
@@ -199,12 +187,6 @@
 #ifdef CONFIG_RUN_FROM_IRAM_ONLY
 #define CONFIG_SYS_MALLOC_BASE		(DDR_BASE_ADDR)
 #endif
-
-/*
- * Stack sizes
- * The stack sizes are set up in start.S using the settings below
- */
-#define CONFIG_STACKSIZE		(128 * 1024)	/* regular stack */
 
 #if 0
 /* Configure PXE */

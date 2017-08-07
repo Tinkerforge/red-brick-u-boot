@@ -2,9 +2,10 @@
 # SPDX-License-Identifier:	GPL-2.0+
 #
 
-obj-$(CONFIG_$(SPL_)DM)		+= core/
+obj-$(CONFIG_$(SPL_TPL_)DM)	+= core/
 obj-$(CONFIG_$(SPL_)CLK)	+= clk/
 obj-$(CONFIG_$(SPL_)LED)	+= led/
+obj-$(CONFIG_$(SPL_)PHY)	+= phy/
 obj-$(CONFIG_$(SPL_)PINCTRL)	+= pinctrl/
 obj-$(CONFIG_$(SPL_)RAM)	+= ram/
 
@@ -23,7 +24,7 @@ obj-$(CONFIG_SPL_SERIAL_SUPPORT) += serial/
 obj-$(CONFIG_SPL_SPI_SUPPORT) += spi/
 obj-$(CONFIG_SPL_POWER_SUPPORT) += power/ power/pmic/
 obj-$(CONFIG_SPL_POWER_SUPPORT) += power/regulator/
-obj-$(CONFIG_SPL_DRIVERS_MISC_SUPPORT) += misc/ sysreset/
+obj-$(CONFIG_SPL_DRIVERS_MISC_SUPPORT) += misc/ sysreset/ firmware/
 obj-$(CONFIG_SPL_MTD_SUPPORT) += mtd/
 obj-$(CONFIG_SPL_NAND_SUPPORT) += mtd/nand/
 obj-$(CONFIG_SPL_ONENAND_SUPPORT) += mtd/onenand/
@@ -52,7 +53,7 @@ endif
 ifdef CONFIG_TPL_BUILD
 
 obj-$(CONFIG_TPL_I2C_SUPPORT) += i2c/
-obj-$(CONFIG_TPL_DRIVERS_MISC_SUPPORT) += misc/ sysreset/
+obj-$(CONFIG_TPL_DRIVERS_MISC_SUPPORT) += misc/ sysreset/ firmware/
 obj-$(CONFIG_TPL_MMC_SUPPORT) += mmc/
 obj-$(CONFIG_TPL_MPC8XXX_INIT_DDR_SUPPORT) += ddr/fsl/
 obj-$(CONFIG_TPL_NAND_SUPPORT) += mtd/nand/
@@ -71,9 +72,10 @@ obj-y += block/
 obj-$(CONFIG_BOOTCOUNT_LIMIT) += bootcount/
 obj-$(CONFIG_CPU) += cpu/
 obj-y += crypto/
+obj-y += firmware/
 obj-$(CONFIG_FPGA) += fpga/
-obj-y += hwmon/
 obj-y += misc/
+obj-$(CONFIG_MMC) += mmc/
 obj-y += pcmcia/
 obj-y += dfu/
 obj-$(CONFIG_X86) += pch/
@@ -84,7 +86,6 @@ obj-y += spmi/
 obj-y += sysreset/
 obj-y += timer/
 obj-y += tpm/
-obj-y += twserial/
 obj-y += video/
 obj-y += watchdog/
 obj-$(CONFIG_QE) += qe/

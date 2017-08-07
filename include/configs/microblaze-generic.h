@@ -32,7 +32,6 @@
 #endif
 
 /* uart */
-# define CONFIG_BAUDRATE	115200
 /* The following table includes the supported baudrates */
 # define CONFIG_SYS_BAUDRATE_TABLE \
 	{300, 600, 1200, 2400, 4800, 9600, 19200, 38400, 57600, 115200, 230400}
@@ -169,11 +168,9 @@
 /*
  * Command line configuration.
  */
-#define CONFIG_CMD_IRQ
 #define CONFIG_CMD_MFSL
 
 #if defined(FLASH)
-# define CONFIG_CMD_JFFS2
 # undef CONFIG_CMD_UBIFS
 
 # if !defined(RAMENV)
@@ -187,7 +184,6 @@
 #  define CONFIG_CMD_SAVES
 # endif
 #else
-# undef CONFIG_CMD_JFFS2
 # undef CONFIG_CMD_UBIFS
 #endif
 #endif
@@ -276,7 +272,6 @@
 /* SPL part */
 #define CONFIG_CMD_SPL
 #define CONFIG_SPL_FRAMEWORK
-#define CONFIG_SPL_BOARD_INIT
 
 #define CONFIG_SPL_LDSCRIPT	"arch/microblaze/cpu/u-boot-spl.lds"
 

@@ -14,7 +14,6 @@
 #define CONFIG_SPL_LIBCOMMON_SUPPORT
 #include "imx6_spl.h"
 
-#define CONFIG_SPL_BOARD_INIT
 #define CONFIG_SYS_UBOOT_START CONFIG_SYS_TEXT_BASE
 #define CONFIG_SYS_UBOOT_BASE (CONFIG_SYS_FLASH_BASE + 0x80000)
 #define CONFIG_SPL_OS_BOOT
@@ -98,8 +97,6 @@
 	"128k@0x19C0000(swupdate-kernel-dtb.nor)"
 
 /* USB Configs */
-#define CONFIG_USB_EHCI
-#define CONFIG_USB_EHCI_MX6
 #define CONFIG_USB_STORAGE
 #define CONFIG_USB_MAX_CONTROLLER_COUNT	2
 #define CONFIG_MXC_USB_PORTSC		(PORT_PTS_UTMI | PORT_PTS_PTW)
@@ -118,7 +115,7 @@
 
 #define CONFIG_ENV_VARS_UBOOT_RUNTIME_CONFIG
 #define CONFIG_EXTRA_ENV_SETTINGS \
-	"console=ttymxc0,115200\0" \
+	"console=ttymxc0,115200 quiet\0" \
 	"fdtfile=imx6q-mccmon6.dtb\0" \
 	"fdt_high=0xffffffff\0" \
 	"initrd_high=0xffffffff\0" \
@@ -148,7 +145,7 @@
 	"boot_nor=" \
 		"setenv kernelnor 0x08180000;" \
 		"setenv dtbnor 0x09980000;" \
-		"setenv bootargs console=${console} quiet " \
+		"setenv bootargs console=${console} " \
 		""MTDPARTS_DEFAULT" " \
 		"root=/dev/mmcblk1 rootfstype=ext4 rw rootwait noinitrd;" \
 		"cp.l ${dtbnor} ${dtbloadaddr} 0x8000;" \
@@ -262,6 +259,14 @@
 		"setenv nor_img_file uImage; " \
 		"setenv nor_img_size 0x500000; " \
 		"setenv nor_bank_start 0x08180000; " \
+		"if tftpboot ${nor_img_addr} ${nor_img_file}; then " \
+		    "run nor_update;" \
+		"fi\0" \
+	"tftp_nor_dtb="\
+		"echo 'Update mccmon6 NOR DTB via TFTP'; " \
+		"setenv nor_img_file imx6q-mccmon6.dtb; " \
+		"setenv nor_img_size 0x20000; " \
+		"setenv nor_bank_start 0x09980000; " \
 		"if tftpboot ${nor_img_addr} ${nor_img_file}; then " \
 		    "run nor_update;" \
 		"fi\0" \

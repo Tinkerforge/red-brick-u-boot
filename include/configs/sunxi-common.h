@@ -32,11 +32,8 @@
 # define CONFIG_MACH_TYPE_COMPAT_REV	1
 #endif
 
-/*
- * High Level Configuration Options
- */
-#if defined(CONFIG_SPL_BUILD) && !defined(CONFIG_ARM64)
-#define CONFIG_SYS_THUMB_BUILD	/* Thumbs mode to save space in SPL */
+#ifdef CONFIG_ARM64
+#define CONFIG_BUILD_TARGET "u-boot.itb"
 #endif
 
 /* Serial & console */
@@ -53,7 +50,7 @@
 #endif
 
 /* CPU */
-#define CONFIG_TIMER_CLK_FREQ		24000000
+#define COUNTER_FREQUENCY		24000000
 
 /*
  * The DRAM Base differs between some models. We cannot use macros for the
@@ -76,7 +73,12 @@
 #define SDRAM_OFFSET(x) 0x4##x
 #define CONFIG_SYS_SDRAM_BASE		0x40000000
 #define CONFIG_SYS_LOAD_ADDR		0x42000000 /* default load address */
+/* V3s do not have enough memory to place code at 0x4a000000 */
+#ifndef CONFIG_MACH_SUN8I_V3S
 #define CONFIG_SYS_TEXT_BASE		0x4a000000
+#else
+#define CONFIG_SYS_TEXT_BASE		0x42e00000
+#endif
 /* Note SPL_STACK_R_ADDR is set through Kconfig, we include it here
  * since it needs to fit in with the other values. By also #defining it
  * we get warnings if the Kconfig value mismatches. */
@@ -86,7 +88,7 @@
 
 #define CONFIG_SPL_BSS_MAX_SIZE		0x00080000 /* 512 KiB */
 
-#if defined(CONFIG_MACH_SUN9I) || defined(CONFIG_MACH_SUN50I)
+#ifdef CONFIG_SUNXI_HIGH_SRAM
 /*
  * The A80's A1 sram starts at 0x00010000 rather then at 0x00000000 and is
  * slightly bigger. Note that it is possible to map the first 32 KiB of the
@@ -132,6 +134,9 @@
 #define CONFIG_SYS_NAND_MAX_ECCPOS 1664
 #define CONFIG_SYS_NAND_ONFI_DETECTION
 #define CONFIG_SYS_MAX_NAND_DEVICE 8
+
+#define CONFIG_MTD_DEVICE
+#define CONFIG_MTD_PARTITIONS
 #endif
 
 #ifdef CONFIG_SPL_SPI_SUNXI
@@ -141,13 +146,22 @@
 /* mmc config */
 #ifdef CONFIG_MMC
 #define CONFIG_MMC_SUNXI_SLOT		0
-#define CONFIG_ENV_IS_IN_MMC
-#define CONFIG_SYS_MMC_ENV_DEV		0	/* first detected MMC controller */
-#define CONFIG_SYS_MMC_MAX_DEVICE	4
 #endif
 
+#if defined(CONFIG_ENV_IS_IN_MMC)
+#define CONFIG_SYS_MMC_ENV_DEV		0	/* first detected MMC controller */
+#define CONFIG_SYS_MMC_MAX_DEVICE	4
+#elif defined(CONFIG_ENV_IS_NOWHERE)
+#define CONFIG_ENV_SIZE			(128 << 10)
+#endif
+
+#ifndef CONFIG_MACH_SUN8I_V3S
 /* 64MB of malloc() pool */
 #define CONFIG_SYS_MALLOC_LEN		(CONFIG_ENV_SIZE + (64 << 20))
+#else
+/* 2MB of malloc() pool */
+#define CONFIG_SYS_MALLOC_LEN		(CONFIG_ENV_SIZE + (2 << 20))
+#endif
 
 /*
  * Miscellaneous configurable options
@@ -162,20 +176,9 @@
 /* standalone support */
 #define CONFIG_STANDALONE_LOAD_ADDR	CONFIG_SYS_LOAD_ADDR
 
-/* baudrate */
-#define CONFIG_BAUDRATE			115200
-
-/* The stack sizes are set up in start.S using the settings below */
-#define CONFIG_STACKSIZE		(256 << 10)	/* 256 KiB */
-
 /* FLASH and environment organization */
 
 #define CONFIG_SYS_MONITOR_LEN		(768 << 10)	/* 768 KiB */
-
-#define CONFIG_ENV_OFFSET		(544 << 10) /* (8 + 24 + 512) KiB */
-#define CONFIG_ENV_SIZE			(128 << 10)	/* 128 KiB */
-
-#define CONFIG_FAT_WRITE	/* enable write access */
 
 #define CONFIG_SPL_FRAMEWORK
 
@@ -183,16 +186,22 @@
 #define CONFIG_SPL_BOARD_LOAD_IMAGE
 #endif
 
-#if defined(CONFIG_MACH_SUN9I)
-#define CONFIG_SPL_TEXT_BASE		0x10040		/* sram start+header */
-#define CONFIG_SPL_MAX_SIZE		0x5fc0		/* ? KiB on sun9i */
-#elif defined(CONFIG_MACH_SUN50I)
-#define CONFIG_SPL_TEXT_BASE		0x10040		/* sram start+header */
-#define CONFIG_SPL_MAX_SIZE		0x7fc0		/* 32 KiB on sun50i */
+#ifdef CONFIG_SUNXI_HIGH_SRAM
+#define CONFIG_SPL_TEXT_BASE		0x10060		/* sram start+header */
+#define CONFIG_SPL_MAX_SIZE		0x7fa0		/* 32 KiB */
+#ifdef CONFIG_ARM64
+/* end of SRAM A2 for now, as SRAM A1 is pretty tight for an ARM64 build */
+#define LOW_LEVEL_SRAM_STACK		0x00054000
 #else
-#define CONFIG_SPL_TEXT_BASE		0x40		/* sram start+header */
-#define CONFIG_SPL_MAX_SIZE		0x5fc0		/* 24KB on sun4i/sun7i */
+#define LOW_LEVEL_SRAM_STACK		0x00018000
+#endif /* !CONFIG_ARM64 */
+#else
+#define CONFIG_SPL_TEXT_BASE		0x60		/* sram start+header */
+#define CONFIG_SPL_MAX_SIZE		0x5fa0		/* 24KB on sun4i/sun7i */
+#define LOW_LEVEL_SRAM_STACK		0x00008000	/* End of sram */
 #endif
+
+#define CONFIG_SPL_STACK		LOW_LEVEL_SRAM_STACK
 
 #ifndef CONFIG_ARM64
 #define CONFIG_SPL_LDSCRIPT "arch/arm/cpu/armv7/sunxi/u-boot-spl.lds"
@@ -200,15 +209,6 @@
 
 #define CONFIG_SPL_PAD_TO		32768		/* decimal for 'dd' */
 
-#if defined(CONFIG_MACH_SUN9I) || defined(CONFIG_MACH_SUN50I)
-/* FIXME: 40 KiB instead of 32 KiB ? */
-#define LOW_LEVEL_SRAM_STACK		0x00018000
-#define CONFIG_SPL_STACK		LOW_LEVEL_SRAM_STACK
-#else
-/* end of 32 KiB in sram */
-#define LOW_LEVEL_SRAM_STACK		0x00008000 /* End of sram */
-#define CONFIG_SPL_STACK		LOW_LEVEL_SRAM_STACK
-#endif
 
 /* I2C */
 #if defined CONFIG_AXP152_POWER || defined CONFIG_AXP209_POWER || \
@@ -218,10 +218,12 @@
 #if defined CONFIG_I2C0_ENABLE || defined CONFIG_I2C1_ENABLE || \
     defined CONFIG_I2C2_ENABLE || defined CONFIG_I2C3_ENABLE || \
     defined CONFIG_I2C4_ENABLE || defined CONFIG_R_I2C_ENABLE
-#define CONFIG_SYS_I2C
 #define CONFIG_SYS_I2C_MVTWSI
+#ifndef CONFIG_DM_I2C
+#define CONFIG_SYS_I2C
 #define CONFIG_SYS_I2C_SPEED		400000
 #define CONFIG_SYS_I2C_SLAVE		0x7f
+#endif
 #endif
 
 #if defined CONFIG_VIDEO_LCD_PANEL_I2C && !(defined CONFIG_SPL_BUILD)
@@ -358,13 +360,6 @@ extern int soft_i2c_gpio_scl;
 #define CONFIG_SYS_USB_EVENT_POLL_VIA_INT_QUEUE
 #endif
 
-#if !defined CONFIG_ENV_IS_IN_MMC && \
-    !defined CONFIG_ENV_IS_IN_NAND && \
-    !defined CONFIG_ENV_IS_IN_FAT && \
-    !defined CONFIG_ENV_IS_IN_SPI_FLASH
-#define CONFIG_ENV_IS_NOWHERE
-#endif
-
 #define CONFIG_MISC_INIT_R
 
 #ifndef CONFIG_SPL_BUILD
@@ -380,6 +375,7 @@ extern int soft_i2c_gpio_scl;
  * Scripts, PXE and DTBs should go afterwards, leaving the rest for the initrd.
  * Align the initrd to a 2MB page.
  */
+#define BOOTM_SIZE	__stringify(0xa000000)
 #define KERNEL_ADDR_R	__stringify(SDRAM_OFFSET(0080000))
 #define FDT_ADDR_R	__stringify(SDRAM_OFFSET(FA00000))
 #define SCRIPT_ADDR_R	__stringify(SDRAM_OFFSET(FC00000))
@@ -392,16 +388,30 @@ extern int soft_i2c_gpio_scl;
  * 32M uncompressed kernel, 16M compressed kernel, 1M fdt,
  * 1M script, 1M pxe and the ramdisk at the end.
  */
-
+#ifndef CONFIG_MACH_SUN8I_V3S
+#define BOOTM_SIZE     __stringify(0xa000000)
 #define KERNEL_ADDR_R  __stringify(SDRAM_OFFSET(2000000))
 #define FDT_ADDR_R     __stringify(SDRAM_OFFSET(3000000))
 #define SCRIPT_ADDR_R  __stringify(SDRAM_OFFSET(3100000))
 #define PXEFILE_ADDR_R __stringify(SDRAM_OFFSET(3200000))
 #define RAMDISK_ADDR_R __stringify(SDRAM_OFFSET(3300000))
+#else
+/*
+ * 64M RAM minus 2MB heap + 16MB for u-boot, stack, fb, etc.
+ * 16M uncompressed kernel, 8M compressed kernel, 1M fdt,
+ * 1M script, 1M pxe and the ramdisk at the end.
+ */
+#define BOOTM_SIZE     __stringify(0x2e00000)
+#define KERNEL_ADDR_R  __stringify(SDRAM_OFFSET(1000000))
+#define FDT_ADDR_R     __stringify(SDRAM_OFFSET(1800000))
+#define SCRIPT_ADDR_R  __stringify(SDRAM_OFFSET(1900000))
+#define PXEFILE_ADDR_R __stringify(SDRAM_OFFSET(1A00000))
+#define RAMDISK_ADDR_R __stringify(SDRAM_OFFSET(1B00000))
+#endif
 #endif
 
 #define MEM_LAYOUT_ENV_SETTINGS \
-	"bootm_size=0xa000000\0" \
+	"bootm_size=" BOOTM_SIZE "\0" \
 	"kernel_addr_r=" KERNEL_ADDR_R "\0" \
 	"fdt_addr_r=" FDT_ADDR_R "\0" \
 	"scriptaddr=" SCRIPT_ADDR_R "\0" \
@@ -488,22 +498,49 @@ extern int soft_i2c_gpio_scl;
 #define CONSOLE_STDOUT_SETTINGS \
 	"stdout=serial,vga\0" \
 	"stderr=serial,vga\0"
+#elif CONFIG_DM_VIDEO
+#define CONFIG_SYS_WHITE_ON_BLACK
+#define CONSOLE_STDOUT_SETTINGS \
+	"stdout=serial,vidconsole\0" \
+	"stderr=serial,vidconsole\0"
 #else
 #define CONSOLE_STDOUT_SETTINGS \
 	"stdout=serial\0" \
 	"stderr=serial\0"
 #endif
 
+#ifdef CONFIG_MTDIDS_DEFAULT
+#define SUNXI_MTDIDS_DEFAULT \
+	"mtdids=" CONFIG_MTDIDS_DEFAULT "\0"
+#else
+#define SUNXI_MTDIDS_DEFAULT
+#endif
+
+#ifdef CONFIG_MTDPARTS_DEFAULT
+#define SUNXI_MTDPARTS_DEFAULT \
+	"mtdparts=" CONFIG_MTDPARTS_DEFAULT "\0"
+#else
+#define SUNXI_MTDPARTS_DEFAULT
+#endif
+
 #define CONSOLE_ENV_SETTINGS \
 	CONSOLE_STDIN_SETTINGS \
 	CONSOLE_STDOUT_SETTINGS
+
+#ifdef CONFIG_ARM64
+#define FDTFILE "allwinner/" CONFIG_DEFAULT_DEVICE_TREE ".dtb"
+#else
+#define FDTFILE CONFIG_DEFAULT_DEVICE_TREE ".dtb"
+#endif
 
 #define CONFIG_EXTRA_ENV_SETTINGS \
 	CONSOLE_ENV_SETTINGS \
 	MEM_LAYOUT_ENV_SETTINGS \
 	DFU_ALT_INFO_RAM \
-	"fdtfile=" CONFIG_DEFAULT_DEVICE_TREE ".dtb\0" \
+	"fdtfile=" FDTFILE "\0" \
 	"console=ttyS0,115200\0" \
+	SUNXI_MTDIDS_DEFAULT \
+	SUNXI_MTDPARTS_DEFAULT \
 	BOOTCMD_SUNXI_COMPAT \
 	BOOTENV
 

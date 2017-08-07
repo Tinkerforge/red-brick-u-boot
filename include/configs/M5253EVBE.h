@@ -14,7 +14,6 @@
 
 #define CONFIG_MCFUART
 #define CONFIG_SYS_UART_PORT		(0)
-#define CONFIG_BAUDRATE		115200
 
 #undef CONFIG_WATCHDOG		/* disable watchdog */
 
@@ -47,7 +46,6 @@
 /*
  * Command line configuration.
  */
-#define CONFIG_CMD_IDE
 
 /* ATA */
 #define CONFIG_IDE_RESET	1

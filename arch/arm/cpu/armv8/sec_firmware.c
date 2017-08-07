@@ -224,10 +224,10 @@ __weak bool sec_firmware_is_valid(const void *sec_firmware_img)
  */
 unsigned int sec_firmware_support_psci_version(void)
 {
-	if (sec_firmware_addr & SEC_FIRMWARE_RUNNING)
+	if (current_el() == SEC_FIRMWARE_TARGET_EL)
 		return _sec_firmware_support_psci_version();
 
-	return 0xffffffff;
+	return PSCI_INVALID_VER;
 }
 #endif
 

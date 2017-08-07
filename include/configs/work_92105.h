@@ -50,7 +50,6 @@
  * Serial Driver
  */
 #define CONFIG_SYS_LPC32XX_UART		5   /* UART5 - NS16550 */
-#define CONFIG_BAUDRATE			115200
 
 /*
  * Ethernet Driver
@@ -75,7 +74,6 @@
  * I2C EEPROM
  */
 
-#define CONFIG_CMD_EEPROM
 #define CONFIG_SYS_I2C_EEPROM_ADDR 0x56
 #define CONFIG_SYS_I2C_EEPROM_ADDR_LEN 2
 
@@ -83,16 +81,7 @@
  * I2C RTC
  */
 
-#define CONFIG_CMD_DATE
 #define CONFIG_RTC_DS1374
-
-/*
- * I2C Temperature Sensor (DTT)
- */
-
-#define CONFIG_CMD_DTT
-#define CONFIG_DTT_SENSORS { 0, 1 }
-#define CONFIG_DTT_DS620
 
 /*
  * U-Boot General Configurations
@@ -145,7 +134,6 @@
 #define CONFIG_LPC32XX_SSP
 #define CONFIG_LPC32XX_SSP_TIMEOUT 100000
 #define CONFIG_CMD_MAX6957
-#define CONFIG_CMD_HD44760
 /*
  * Environment
  */
@@ -175,7 +163,6 @@
 #define CONFIG_SPL_TEXT_BASE 0x00000000
 /* SPL will use SRAM as stack */
 #define CONFIG_SPL_STACK     0x0000FFF8
-#define CONFIG_SPL_BOARD_INIT
 /* Use the framework and generic lib */
 #define CONFIG_SPL_FRAMEWORK
 /* SPL will use serial */

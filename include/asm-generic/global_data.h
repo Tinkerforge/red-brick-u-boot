@@ -72,6 +72,9 @@ typedef struct global_data {
 	const void *fdt_blob;		/* Our device tree, NULL if none */
 	void *new_fdt;			/* Relocated FDT */
 	unsigned long fdt_size;		/* Space reserved for relocated FDT */
+#ifdef CONFIG_OF_LIVE
+	struct device_node *of_root;
+#endif
 	struct jt_funcs *jt;		/* jump table */
 	char env_buf[32];		/* buffer for getenv() before reloc. */
 #ifdef CONFIG_TRACE
@@ -83,8 +86,8 @@ typedef struct global_data {
 #ifdef CONFIG_SYS_I2C_MXC
 	void *srdata[10];
 #endif
-	unsigned long timebase_h;
-	unsigned long timebase_l;
+	unsigned int timebase_h;
+	unsigned int timebase_l;
 #ifdef CONFIG_SYS_MALLOC_F_LEN
 	unsigned long malloc_base;	/* base address of early malloc() */
 	unsigned long malloc_limit;	/* limit address */
@@ -107,7 +110,17 @@ typedef struct global_data {
 	ulong video_top;		/* Top of video frame buffer area */
 	ulong video_bottom;		/* Bottom of video frame buffer area */
 #endif
+#ifdef CONFIG_BOOTSTAGE
+	struct bootstage_data *bootstage;	/* Bootstage information */
+	struct bootstage_data *new_bootstage;	/* Relocated bootstage info */
+#endif
 } gd_t;
+#endif
+
+#ifdef CONFIG_BOARD_TYPES
+#define gd_board_type()		gd->board_type
+#else
+#define gd_board_type()		0
 #endif
 
 /*
@@ -127,5 +140,6 @@ typedef struct global_data {
 #define GD_FLG_SKIP_RELOC	0x00800	/* Don't relocate		   */
 #define GD_FLG_RECORD		0x01000	/* Record console		   */
 #define GD_FLG_ENV_DEFAULT	0x02000 /* Default variable flag	   */
+#define GD_FLG_SPL_EARLY_INIT	0x04000 /* Early SPL init is done	   */
 
 #endif /* __ASM_GENERIC_GBL_DATA_H */

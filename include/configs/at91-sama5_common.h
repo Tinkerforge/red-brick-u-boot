@@ -27,7 +27,9 @@
 #define CONFIG_ENV_VARS_UBOOT_CONFIG
 
 /* general purpose I/O */
+#ifndef CONFIG_DM_GPIO
 #define CONFIG_AT91_GPIO
+#endif
 
 
 /*
@@ -52,7 +54,6 @@
 #else
 /* u-boot env in sd/mmc card */
 #define CONFIG_ENV_IS_IN_FAT
-#define CONFIG_FAT_WRITE
 #define FAT_ENV_INTERFACE	"mmc"
 #define FAT_ENV_DEVICE_AND_PART	"0"
 #define FAT_ENV_FILE		"uboot.env"
@@ -98,8 +99,6 @@
 #endif
 
 #endif
-
-#define CONFIG_BAUDRATE			115200
 
 #define CONFIG_SYS_CBSIZE		256
 #define CONFIG_SYS_MAXARGS		16

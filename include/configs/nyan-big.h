@@ -30,11 +30,6 @@
 #define CONFIG_SYS_MMC_ENV_PART		2
 #define CONFIG_ENV_OFFSET		(-CONFIG_ENV_SIZE)
 
-/* LCD support */
-#define CONFIG_AS3722_POWER
-#define CONFIG_SYS_WHITE_ON_BLACK
-#define CONFIG_CMD_BMP
-
 /* Align LCD to 1MB boundary */
 #define CONFIG_LCD_ALIGNMENT	MMU_SECTION_SIZE
 
@@ -44,7 +39,6 @@
 #define CONFIG_SPI_FLASH_SIZE          (4 << 20)
 
 /* USB Host support */
-#define CONFIG_USB_EHCI
 #define CONFIG_USB_EHCI_TEGRA
 
 /* USB networking support */

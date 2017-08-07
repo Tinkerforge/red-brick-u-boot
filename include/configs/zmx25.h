@@ -54,7 +54,6 @@
 #define CONFIG_MXC_UART
 #define CONFIG_MXC_UART_BASE	UART2_BASE
 #define CONFIG_CONS_INDEX	1	/* use UART2 for console */
-#define CONFIG_BAUDRATE		115200	/* Default baud rate */
 
 /*
  * Ethernet
@@ -83,7 +82,6 @@
  * USB
  */
 #ifdef CONFIG_CMD_USB
-#define CONFIG_USB_EHCI			/* Enable EHCI USB support */
 #define CONFIG_USB_EHCI_MXC
 #define CONFIG_EHCI_HCD_INIT_AFTER_RESET
 #define CONFIG_MXC_USB_PORT	1

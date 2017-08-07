@@ -77,7 +77,6 @@
 /* Serial port */
 #define CONFIG_ATMEL_USART
 #define CONFIG_USART3			/* USART 3 is DBGU */
-#define CONFIG_BAUDRATE			115200
 #define CONFIG_USART_BASE		ATMEL_BASE_DBGU
 #define	CONFIG_USART_ID			ATMEL_ID_SYS
 
@@ -85,13 +84,10 @@
 #define CONFIG_AT91_GPIO
 
 /* Command line configuration */
-#define CONFIG_CMD_JFFS2
 #define CONFIG_CMD_MTDPARTS
 #define CONFIG_CMD_NAND
 
 #ifndef MINIMAL_LOADER
-#define CONFIG_CMD_BSP
-#define CONFIG_CMD_DATE
 #define CONFIG_CMD_REISER
 #define CONFIG_CMD_SAVES
 #define CONFIG_CMD_UBIFS

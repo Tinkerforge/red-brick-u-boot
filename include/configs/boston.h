@@ -8,6 +8,11 @@
 #define __CONFIGS_BOSTON_H__
 
 /*
+ * General board configuration
+ */
+#define CONFIG_SYS_BOOTM_LEN		(64 * 1024 * 1024)
+
+/*
  * CPU
  */
 #define CONFIG_SYS_MIPS_TIMER_FREQ	30000000
@@ -45,7 +50,6 @@
 #define CONFIG_SYS_PBSIZE		(CONFIG_SYS_CBSIZE + \
 					 sizeof(CONFIG_SYS_PROMPT) + 16)
 #define CONFIG_SYS_LONGHELP
-#define CONFIG_BAUDRATE			115200
 
 /*
  * Flash

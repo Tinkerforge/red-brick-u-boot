@@ -14,9 +14,6 @@
 #ifndef __CONFIG_SIEMENS_AM33X_COMMON_H
 #define __CONFIG_SIEMENS_AM33X_COMMON_H
 
-#define CONFIG_AM33XX
-#define CONFIG_OMAP
-
 #include <asm/arch/omap.h>
 
 #define CONFIG_DMA_COHERENT
@@ -100,8 +97,6 @@
 #define CONFIG_SYS_NS16550_COM1		0x44e09000
 #define CONFIG_SYS_NS16550_COM4		0x481a6000
 
-#define CONFIG_BAUDRATE		115200
-
 #define CONFIG_SERIAL1                  1
 #define CONFIG_CONS_INDEX               1
 
@@ -123,14 +118,12 @@
 
 #define CONFIG_SYS_MMCSD_FS_BOOT_PARTITION	1
 #define CONFIG_SPL_FS_LOAD_PAYLOAD_NAME	"u-boot.img"
-#define CONFIG_FS_FAT
 
 #define CONFIG_SPL_SPI_LOAD
 #define CONFIG_SYS_SPI_U_BOOT_OFFS	0x20000
 
-#define CONFIG_SPL_LDSCRIPT		"arch/arm/mach-omap2/am33xx/u-boot-spl.lds"
+#define CONFIG_SPL_LDSCRIPT		"arch/arm/mach-omap2/u-boot-spl.lds"
 
-#define CONFIG_SPL_BOARD_INIT
 #define CONFIG_SPL_NAND_AM33XX_BCH
 #define CONFIG_SPL_NAND_BASE
 #define CONFIG_SPL_NAND_DRIVERS
@@ -229,9 +222,6 @@
 # define CONFIG_ENV_OFFSET		(892 << 10) /* 892 KiB in */
 # define CONFIG_ENV_SECT_SIZE		(4 << 10) /* 4 KB sectors */
 #endif /* SPI support */
-
-/* Unsupported features */
-#undef CONFIG_USE_IRQ
 
 #define CONFIG_DRIVER_TI_CPSW
 #define CONFIG_MII
@@ -552,13 +542,6 @@
 #define CONFIG_SYS_ENV_SECT_SIZE	(128 << 10)	/* 128 KiB */
 #endif
 #endif
-
-#define CONFIG_OMAP_GPIO
-
-/* Gpio cmd support */
-
-/* Watchdog */
-#define CONFIG_HW_WATCHDOG
 
 /* Reboot after 60 sec if bootcmd fails */
 #define CONFIG_RESET_TO_RETRY

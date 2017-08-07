@@ -148,7 +148,6 @@
 /*
  * Support USB
  */
-#define CONFIG_USB_EHCI
 #define CONFIG_USB_EHCI_FSL
 
 /* Current USB implementation supports the only USB controller,
@@ -356,7 +355,6 @@ boards, we say we have two, but don't display a message if we find only one. */
 		{300, 600, 1200, 2400, 4800, 9600, 19200, 38400, 115200}
 
 #define CONSOLE			ttyS0
-#define CONFIG_BAUDRATE		115200
 
 #define CONFIG_SYS_NS16550_COM1	(CONFIG_SYS_IMMR + 0x4500)
 #define CONFIG_SYS_NS16550_COM2	(CONFIG_SYS_IMMR + 0x4600)
@@ -480,17 +478,11 @@ boards, we say we have two, but don't display a message if we find only one. */
 /*
  * Command line configuration.
  */
-#define CONFIG_CMD_DATE
-#define CONFIG_CMD_IRQ
 #define CONFIG_CMD_SDRAM
 
 #if defined(CONFIG_COMPACT_FLASH) || defined(CONFIG_SATA_SIL3114) \
 				|| defined(CONFIG_USB_STORAGE)
 	#define CONFIG_SUPPORT_VFAT
-#endif
-
-#ifdef CONFIG_COMPACT_FLASH
-	#define CONFIG_CMD_IDE
 #endif
 
 #ifdef CONFIG_SATA_SIL3114

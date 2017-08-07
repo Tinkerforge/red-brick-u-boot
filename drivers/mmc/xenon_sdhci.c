@@ -422,7 +422,8 @@ static int xenon_sdhci_probe(struct udevice *dev)
 
 	host->ops = &xenon_sdhci_ops;
 
-	ret = sdhci_setup_cfg(&plat->cfg, host, XENON_MMC_MAX_CLK, 0);
+	host->max_clk = XENON_MMC_MAX_CLK;
+	ret = sdhci_setup_cfg(&plat->cfg, host, 0, 0);
 	if (ret)
 		return ret;
 
@@ -451,10 +452,10 @@ static int xenon_sdhci_ofdata_to_platdata(struct udevice *dev)
 	const char *name;
 
 	host->name = dev->name;
-	host->ioaddr = (void *)dev_get_addr(dev);
+	host->ioaddr = (void *)devfdt_get_addr(dev);
 
-	if (of_device_is_compatible(dev, "marvell,armada-3700-sdhci"))
-		priv->pad_ctrl_reg = (void *)dev_get_addr_index(dev, 1);
+	if (device_is_compatible(dev, "marvell,armada-3700-sdhci"))
+		priv->pad_ctrl_reg = (void *)devfdt_get_addr_index(dev, 1);
 
 	name = fdt_getprop(gd->fdt_blob, dev_of_offset(dev), "marvell,pad-type",
 			   NULL);

@@ -35,9 +35,6 @@
 #endif
 #endif
 
-
-#define CONFIG_BAUDRATE		115200
-
 /* valid baudrates */
 
 #define	CONFIG_TIMESTAMP		/* Print image info with timestamp */
@@ -69,17 +66,10 @@
 /*
  * Command line configuration.
  */
-#undef CONFIG_CMD_BEDBUG
 
 #ifdef CONFIG_DBAU1550
 
-#undef CONFIG_CMD_IDE
 #undef CONFIG_CMD_PCMCIA
-
-#else
-
-#define CONFIG_CMD_IDE
-
 #endif
 
 /*

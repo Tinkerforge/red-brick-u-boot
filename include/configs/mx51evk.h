@@ -13,8 +13,6 @@
 
  /* High Level Configuration Options */
 
-#define CONFIG_MX51	/* in a mx51 */
-
 #define CONFIG_SYS_FSL_CLK
 #define CONFIG_SYS_TEXT_BASE	0x97800000
 
@@ -35,7 +33,6 @@
  * Hardware drivers
  */
 #define CONFIG_FSL_IIM
-#define CONFIG_CMD_FUSE
 
 #define CONFIG_MXC_UART
 #define CONFIG_MXC_UART_BASE	UART1_BASE
@@ -75,7 +72,6 @@
 #define CONFIG_FEC_MXC_PHYADDR	0x1F
 
 /* USB Configs */
-#define CONFIG_USB_EHCI
 #define CONFIG_USB_EHCI_MX5
 #define CONFIG_USB_HOST_ETHER
 #define CONFIG_USB_ETHER_ASIX
@@ -96,14 +92,6 @@
 /* allow to overwrite serial and ethaddr */
 #define CONFIG_ENV_OVERWRITE
 #define CONFIG_CONS_INDEX		1
-#define CONFIG_BAUDRATE			115200
-
-/***********************************************************
- * Command definition
- ***********************************************************/
-
-#define CONFIG_CMD_DATE
-
 
 #define CONFIG_ETHPRIME		"FEC0"
 

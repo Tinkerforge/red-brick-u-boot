@@ -12,6 +12,7 @@
 #include <fdt_support.h>
 #include <fdtdec.h>
 #include <asm/sections.h>
+#include <dm/of_extra.h>
 #include <linux/ctype.h>
 
 DECLARE_GLOBAL_DATA_PTR;
@@ -66,6 +67,14 @@ static const char * const compat_names[COMPAT_COUNT] = {
 	COMPAT(INTEL_BAYTRAIL_FSP_MDP, "intel,baytrail-fsp-mdp"),
 	COMPAT(INTEL_IVYBRIDGE_FSP, "intel,ivybridge-fsp"),
 	COMPAT(COMPAT_SUNXI_NAND, "allwinner,sun4i-a10-nand"),
+	COMPAT(ALTERA_SOCFPGA_CLK, "altr,clk-mgr"),
+	COMPAT(ALTERA_SOCFPGA_PINCTRL_SINGLE, "pinctrl-single"),
+	COMPAT(ALTERA_SOCFPGA_H2F_BRG, "altr,socfpga-hps2fpga-bridge"),
+	COMPAT(ALTERA_SOCFPGA_LWH2F_BRG, "altr,socfpga-lwhps2fpga-bridge"),
+	COMPAT(ALTERA_SOCFPGA_F2H_BRG, "altr,socfpga-fpga2hps-bridge"),
+	COMPAT(ALTERA_SOCFPGA_F2SDR0, "altr,socfpga-fpga2sdram0-bridge"),
+	COMPAT(ALTERA_SOCFPGA_F2SDR1, "altr,socfpga-fpga2sdram1-bridge"),
+	COMPAT(ALTERA_SOCFPGA_F2SDR2, "altr,socfpga-fpga2sdram2-bridge"),
 };
 
 const char *fdtdec_get_compatible(enum fdt_compat_id id)
@@ -112,7 +121,7 @@ fdt_addr_t fdtdec_get_addr_size_fixed(const void *blob, int node,
 		return FDT_ADDR_T_NONE;
 	}
 
-#if !defined(CONFIG_SPL_BUILD) && defined(CONFIG_OF_LIBFDT)
+#if CONFIG_IS_ENABLED(OF_TRANSLATE)
 	if (translate)
 		addr = fdt_translate_address(blob, node, prop_addr);
 	else
@@ -932,38 +941,6 @@ int fdtdec_decode_region(const void *blob, int node, const char *prop_name,
 	return 0;
 }
 
-/**
- * Read a flash entry from the fdt
- *
- * @param blob		FDT blob
- * @param node		Offset of node to read
- * @param name		Name of node being read
- * @param entry		Place to put offset and size of this node
- * @return 0 if ok, -ve on error
- */
-int fdtdec_read_fmap_entry(const void *blob, int node, const char *name,
-			   struct fmap_entry *entry)
-{
-	const char *prop;
-	u32 reg[2];
-
-	if (fdtdec_get_int_array(blob, node, "reg", reg, 2)) {
-		debug("Node '%s' has bad/missing 'reg' property\n", name);
-		return -FDT_ERR_NOTFOUND;
-	}
-	entry->offset = reg[0];
-	entry->length = reg[1];
-	entry->used = fdtdec_get_int(blob, node, "used", entry->length);
-	prop = fdt_getprop(blob, node, "compress", NULL);
-	entry->compress_algo = prop && !strcmp(prop, "lzo") ?
-		FMAP_COMPRESS_LZO : FMAP_COMPRESS_NONE;
-	prop = fdt_getprop(blob, node, "hash", &entry->hash_size);
-	entry->hash_algo = prop ? FMAP_HASH_SHA256 : FMAP_HASH_NONE;
-	entry->hash = (uint8_t *)prop;
-
-	return 0;
-}
-
 u64 fdtdec_get_number(const fdt32_t *ptr, unsigned int cells)
 {
 	u64 number = 0;
@@ -1192,7 +1169,8 @@ int fdtdec_setup_memory_size(void)
 	}
 
 	gd->ram_size = (phys_size_t)(res.end - res.start + 1);
-	debug("%s: Initial DRAM size %llx\n", __func__, (u64)gd->ram_size);
+	debug("%s: Initial DRAM size %llx\n", __func__,
+	      (unsigned long long)gd->ram_size);
 
 	return 0;
 }
@@ -1247,6 +1225,9 @@ int fdtdec_setup(void)
 	/* FDT is at end of image */
 	gd->fdt_blob = (ulong *)&_end;
 #  endif
+# elif defined(CONFIG_OF_BOARD)
+	/* Allow the board to override the fdt address. */
+	gd->fdt_blob = board_fdt_blob_setup();
 # elif defined(CONFIG_OF_HOSTFILE)
 	if (sandbox_read_fdt_from_file()) {
 		puts("Failed to read control FDT\n");

@@ -47,12 +47,10 @@
 /*
  * Serial Console Configuration
  */
-#define	CONFIG_BAUDRATE			115200
 
 /*
  * Bootloader Components Configuration
  */
-#define	CONFIG_CMD_ENV
 
 /* I2C support */
 #ifdef CONFIG_SYS_I2C
@@ -66,8 +64,6 @@
 #ifdef CONFIG_LCD
 #define CONFIG_PXA_LCD
 #define CONFIG_PXA_VGA
-#define CONFIG_SYS_WHITE_ON_BLACK
-#define CONFIG_CMD_BMP
 #define CONFIG_LCD_LOGO
 #endif
 

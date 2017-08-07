@@ -7,6 +7,7 @@
  */
 
 #include <common.h>
+#include <fdt_support.h>
 #include <fdtdec.h>
 #include <linux/errno.h>
 #include <linux/sizes.h>
@@ -232,7 +233,7 @@ int dram_init(void)
 	return 0;
 }
 
-void dram_init_banksize(void)
+int dram_init_banksize(void)
 {
 	struct uniphier_dram_map dram_map[3] = {};
 	int i;
@@ -246,6 +247,8 @@ void dram_init_banksize(void)
 		gd->bd->bi_dram[i].start = dram_map[i].base;
 		gd->bd->bi_dram[i].size = dram_map[i].size;
 	}
+
+	return 0;
 }
 
 #ifdef CONFIG_OF_BOARD_SETUP

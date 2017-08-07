@@ -69,10 +69,6 @@ DECLARE_GLOBAL_DATA_PTR;
 #define I2SR_IIF_CLEAR	(0 << 1)
 #endif
 
-#if defined(CONFIG_HARD_I2C) && !defined(CONFIG_SYS_I2C_BASE)
-#error "define CONFIG_SYS_I2C_BASE to use the mxc_i2c driver"
-#endif
-
 #ifdef I2C_QUIRK_REG
 static u16 i2c_clk_div[60][2] = {
 	{ 20,	0x00 }, { 22,	0x01 }, { 24,	0x02 }, { 26,	0x03 },
@@ -589,7 +585,7 @@ static int bus_i2c_write(struct mxc_i2c_bus *i2c_bus, u8 chip, u32 addr,
 #endif
 
 static struct mxc_i2c_bus mxc_i2c_buses[] = {
-#if defined(CONFIG_LS102XA) || defined(CONFIG_VF610) || \
+#if defined(CONFIG_ARCH_LS1021A) || defined(CONFIG_VF610) || \
 	defined(CONFIG_FSL_LAYERSCAPE)
 	{ 0, I2C1_BASE_ADDR, I2C_QUIRK_FLAG },
 	{ 1, I2C2_BASE_ADDR, I2C_QUIRK_FLAG },
@@ -756,7 +752,7 @@ static int mxc_i2c_probe(struct udevice *bus)
 
 	i2c_bus->driver_data = dev_get_driver_data(bus);
 
-	addr = dev_get_addr(bus);
+	addr = devfdt_get_addr(bus);
 	if (addr == FDT_ADDR_T_NONE)
 		return -ENODEV;
 
@@ -777,12 +773,12 @@ static int mxc_i2c_probe(struct udevice *bus)
 	if (ret < 0) {
 		debug("i2c bus %d at 0x%2lx, no gpio pinctrl state.\n", bus->seq, i2c_bus->base);
 	} else {
-		ret = gpio_request_by_name_nodev(fdt, node, "scl-gpios",
-						 0, &i2c_bus->scl_gpio,
-						 GPIOD_IS_OUT);
-		ret2 = gpio_request_by_name_nodev(fdt, node, "sda-gpios",
-						 0, &i2c_bus->sda_gpio,
-						 GPIOD_IS_OUT);
+		ret = gpio_request_by_name_nodev(offset_to_ofnode(node),
+				"scl-gpios", 0, &i2c_bus->scl_gpio,
+				GPIOD_IS_OUT);
+		ret2 = gpio_request_by_name_nodev(offset_to_ofnode(node),
+				"sda-gpios", 0, &i2c_bus->sda_gpio,
+				GPIOD_IS_OUT);
 		if (!dm_gpio_is_valid(&i2c_bus->sda_gpio) |
 		    !dm_gpio_is_valid(&i2c_bus->scl_gpio) |
 		    ret | ret2) {

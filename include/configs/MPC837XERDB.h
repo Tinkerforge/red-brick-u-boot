@@ -481,7 +481,6 @@
 /*
  * Command line configuration.
  */
-#define CONFIG_CMD_DATE
 
 #if defined(CONFIG_PCI)
 #define CONFIG_CMD_PCI
@@ -652,7 +651,6 @@
 #define CONFIG_ENV_OVERWRITE
 
 #define CONFIG_HAS_FSL_DR_USB
-#define CONFIG_USB_EHCI
 #define CONFIG_USB_EHCI_FSL
 #define CONFIG_EHCI_HCD_INIT_AFTER_RESET
 
@@ -668,7 +666,6 @@
 
 				/* default location for tftp and bootm */
 #define CONFIG_LOADADDR		800000
-#define CONFIG_BAUDRATE		115200
 
 #define CONFIG_EXTRA_ENV_SETTINGS \
 	"netdev=" CONFIG_NETDEV "\0"				\

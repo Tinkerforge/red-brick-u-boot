@@ -44,7 +44,6 @@
  * select serial console configuration
  */
 #define CONFIG_SERIAL2			1	/* use SERIAL2 */
-#define CONFIG_BAUDRATE			115200
 
 /* MMC */
 #define SDHCI_MAX_HOSTS		4
@@ -211,7 +210,6 @@
 #define CONFIG_SYS_ONENAND_BASE		0xB0000000
 
 /* write support for filesystems */
-#define CONFIG_FAT_WRITE
 #define CONFIG_EXT4_WRITE
 
 /* GPT */

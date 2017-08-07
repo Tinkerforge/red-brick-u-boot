@@ -5,18 +5,24 @@
 # SPDX-License-Identifier:	GPL-2.0+
 #
 
-ifdef CONFIG_DM_MMC
-obj-$(CONFIG_GENERIC_MMC) += mmc-uclass.o
-endif
+obj-y += mmc.o
+obj-$(CONFIG_DM_MMC) += mmc-uclass.o
 
 ifndef CONFIG_BLK
-obj-$(CONFIG_GENERIC_MMC) += mmc_legacy.o
+obj-y += mmc_legacy.o
+endif
+
+obj-$(CONFIG_SUPPORT_EMMC_BOOT) += mmc_boot.o
+
+ifdef CONFIG_SPL_BUILD
+obj-$(CONFIG_SPL_MMC_BOOT) += fsl_esdhc_spl.o
+obj-$(CONFIG_SPL_SAVEENV) += mmc_write.o
+else
+obj-y += mmc_write.o
 endif
 
 obj-$(CONFIG_ARM_PL180_MMCI) += arm_pl180_mmci.o
-obj-$(CONFIG_BFIN_SDH) += bfin_sdh.o
 obj-$(CONFIG_MMC_DAVINCI)		+= davinci_mmc.o
-
 obj-$(CONFIG_MMC_DW)			+= dw_mmc.o
 obj-$(CONFIG_MMC_DW_EXYNOS)		+= exynos_dw_mmc.o
 obj-$(CONFIG_MMC_DW_K3)			+= hi6220_dw_mmc.o
@@ -24,30 +30,19 @@ obj-$(CONFIG_MMC_DW_ROCKCHIP)		+= rockchip_dw_mmc.o
 obj-$(CONFIG_MMC_DW_SOCFPGA)		+= socfpga_dw_mmc.o
 obj-$(CONFIG_FSL_ESDHC) += fsl_esdhc.o
 obj-$(CONFIG_FTSDC010) += ftsdc010_mci.o
-obj-$(CONFIG_GENERIC_MMC) += mmc.o
-ifdef CONFIG_SUPPORT_EMMC_BOOT
-obj-$(CONFIG_GENERIC_MMC) += mmc_boot.o
-endif
 obj-$(CONFIG_GENERIC_ATMEL_MCI) += gen_atmel_mci.o
+obj-$(CONFIG_MMC_MESON_GX) += meson_gx_mmc.o
 obj-$(CONFIG_MMC_SPI) += mmc_spi.o
 obj-$(CONFIG_MVEBU_MMC) += mvebu_mmc.o
 obj-$(CONFIG_MMC_OMAP_HS)		+= omap_hsmmc.o
 obj-$(CONFIG_MMC_MXC)			+= mxcmmc.o
 obj-$(CONFIG_MMC_MXS)			+= mxsmmc.o
-obj-$(CONFIG_X86) += pci_mmc.o
+obj-$(CONFIG_MMC_PCI)			+= pci_mmc.o
 obj-$(CONFIG_PXA_MMC_GENERIC) += pxa_mmc_gen.o
 obj-$(CONFIG_SUPPORT_EMMC_RPMB) += rpmb.o
-obj-$(CONFIG_S3C_SDI) += s3c_sdi.o
 obj-$(CONFIG_MMC_SANDBOX)		+= sandbox_mmc.o
 obj-$(CONFIG_SH_MMCIF) += sh_mmcif.o
 obj-$(CONFIG_SH_SDHI) += sh_sdhi.o
-
-ifdef CONFIG_SPL_BUILD
-obj-$(CONFIG_SPL_MMC_BOOT) += fsl_esdhc_spl.o
-obj-$(CONFIG_SPL_SAVEENV) += mmc_write.o
-else
-obj-$(CONFIG_GENERIC_MMC) += mmc_write.o
-endif
 
 # SDHCI
 obj-$(CONFIG_MMC_SDHCI)			+= sdhci.o
@@ -61,6 +56,8 @@ obj-$(CONFIG_MMC_SDHCI_PIC32)		+= pic32_sdhci.o
 obj-$(CONFIG_MMC_SDHCI_ROCKCHIP)	+= rockchip_sdhci.o
 obj-$(CONFIG_MMC_SDHCI_S5P)		+= s5p_sdhci.o
 obj-$(CONFIG_MMC_SDHCI_SPEAR)		+= spear_sdhci.o
+obj-$(CONFIG_MMC_SDHCI_STI) 		+= sti_sdhci.o
+obj-$(CONFIG_MMC_SDHCI_TANGIER)		+= tangier_sdhci.o
 obj-$(CONFIG_MMC_SDHCI_TEGRA)		+= tegra_mmc.o
 obj-$(CONFIG_MMC_SDHCI_XENON)		+= xenon_sdhci.o
 obj-$(CONFIG_MMC_SDHCI_ZYNQ)		+= zynq_sdhci.o

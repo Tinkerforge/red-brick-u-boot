@@ -4,13 +4,13 @@
  * Copyright (C) 2015-2016 Socionext Inc.
  *   Author: Masahiro Yamada <yamada.masahiro@socionext.com>
  *
- * SPDX-License-Identifier:	GPL-2.0+	X11
+ * SPDX-License-Identifier: (GPL-2.0+ OR MIT)
  */
-
-/include/ "skeleton.dtsi"
 
 / {
 	compatible = "socionext,uniphier-sld3";
+	#address-cells = <1>;
+	#size-cells = <1>;
 
 	cpus {
 		#address-cells = <1>;
@@ -101,6 +101,7 @@
 			interrupts = <0 33 4>;
 			pinctrl-names = "default";
 			pinctrl-0 = <&pinctrl_uart0>;
+			clocks = <&sys_clk 0>;
 			clock-frequency = <36864000>;
 		};
 
@@ -111,6 +112,7 @@
 			interrupts = <0 35 4>;
 			pinctrl-names = "default";
 			pinctrl-0 = <&pinctrl_uart1>;
+			clocks = <&sys_clk 0>;
 			clock-frequency = <36864000>;
 		};
 
@@ -121,6 +123,7 @@
 			interrupts = <0 37 4>;
 			pinctrl-names = "default";
 			pinctrl-0 = <&pinctrl_uart2>;
+			clocks = <&sys_clk 0>;
 			clock-frequency = <36864000>;
 		};
 
@@ -301,13 +304,13 @@
 			#size-cells = <1>;
 		};
 
-		smpctrl@59800000 {
+		smpctrl@59801000 {
 			compatible = "socionext,uniphier-smpctrl";
 			reg = <0x59801000 0x400>;
 		};
 
 		mioctrl@59810000 {
-			compatible = "socionext,uniphier-mioctrl",
+			compatible = "socionext,uniphier-sld3-mioctrl",
 				     "simple-mfd", "syscon";
 			reg = <0x59810000 0x800>;
 			u-boot,dm-pre-reloc;
@@ -427,7 +430,7 @@
 		sysctrl@f1840000 {
 			compatible = "socionext,uniphier-sld3-sysctrl",
 				     "simple-mfd", "syscon";
-			reg = <0xf1840000 0x4000>;
+			reg = <0xf1840000 0x10000>;
 
 			sys_clk: clock {
 				compatible = "socionext,uniphier-sld3-clock";
@@ -441,7 +444,7 @@
 		};
 
 		nand: nand@f8000000 {
-			compatible = "socionext,denali-nand-v5a";
+			compatible = "socionext,uniphier-denali-nand-v5a";
 			status = "disabled";
 			reg-names = "nand_data", "denali_reg";
 			reg = <0xf8000000 0x20>, <0xf8100000 0x1000>;

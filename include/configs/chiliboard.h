@@ -120,7 +120,6 @@
 #define CONFIG_SYS_NS16550_COM4		0x481a6000	/* UART3 */
 #define CONFIG_SYS_NS16550_COM5		0x481a8000	/* UART4 */
 #define CONFIG_SYS_NS16550_COM6		0x481aa000	/* UART5 */
-#define CONFIG_BAUDRATE			115200
 
 /* PMIC support */
 #define CONFIG_POWER_TPS65217
@@ -131,7 +130,7 @@
 #define CONFIG_BOOTCOUNT_AM33XX
 #define CONFIG_SYS_BOOTCOUNT_BE
 
-#define CONFIG_SPL_LDSCRIPT	"arch/arm/mach-omap2/am33xx/u-boot-spl.lds"
+#define CONFIG_SPL_LDSCRIPT	"arch/arm/mach-omap2/u-boot-spl.lds"
 
 /* NAND: device related configs */
 #define CONFIG_SYS_NAND_5_ADDR_CYCLE
@@ -189,6 +188,7 @@
  */
 #ifdef CONFIG_SPL_BUILD
 #undef CONFIG_DM_MMC
+#undef CONFIG_DM_MMC_OPS
 #undef CONFIG_TIMER
 #undef CONFIG_DM_USB
 #endif

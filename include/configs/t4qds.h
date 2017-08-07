@@ -241,8 +241,6 @@
 /*
  * Command line configuration.
  */
-#define CONFIG_CMD_ERRATA
-#define CONFIG_CMD_IRQ
 
 #ifdef CONFIG_PCI
 #define CONFIG_CMD_PCI
@@ -285,8 +283,6 @@
 
 /* default location for tftp and bootm */
 #define CONFIG_LOADADDR		1000000
-
-#define CONFIG_BAUDRATE	115200
 
 #define CONFIG_HVBOOT				\
  "setenv bootargs config-addr=0x60000000; "	\

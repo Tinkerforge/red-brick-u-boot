@@ -13,8 +13,6 @@
 /*
  * High Level Configuration Options
  */
-#define CONFIG_OMAP		/* in a TI OMAP core */
-#define CONFIG_OMAP_GPIO
 
 #define CONFIG_SYS_TEXT_BASE 0x80008000
 
@@ -43,7 +41,6 @@
 /*
  * DDR related
  */
-#define CONFIG_OMAP3_MICRON_DDR		/* Micron DDR */
 #define CONFIG_SYS_CS0_SIZE		(256 * 1024 * 1024)
 
 /*
@@ -66,19 +63,14 @@
 
 /* allow to overwrite serial and ethaddr */
 #define CONFIG_ENV_OVERWRITE
-#define CONFIG_BAUDRATE			115200
 #define CONFIG_SYS_BAUDRATE_TABLE	{4800, 9600, 19200, 38400, 57600,\
 					115200}
 /* EHCI */
-#define CONFIG_OMAP3_GPIO_5
-#define CONFIG_USB_EHCI
-#define CONFIG_USB_EHCI_OMAP
 #define CONFIG_OMAP_EHCI_PHY1_RESET_GPIO	25
 #define CONFIG_SYS_USB_EHCI_MAX_ROOT_PORTS 3
 
 /* commands to include */
 #define CONFIG_CMD_NAND		/* NAND support			*/
-#define CONFIG_CMD_EEPROM
 
 #define CONFIG_SYS_I2C
 #define CONFIG_SYS_OMAP24_I2C_SPEED	400000
@@ -170,7 +162,6 @@
 #define CONFIG_DRIVER_TI_EMAC
 #define CONFIG_DRIVER_TI_EMAC_USE_RMII
 #define CONFIG_MII
-#define CONFIG_EMAC_MDIO_PHY_NUM	0
 #define CONFIG_BOOTP_DNS
 #define CONFIG_BOOTP_DNS2
 #define CONFIG_BOOTP_SEND_HOSTNAME
@@ -178,7 +169,6 @@
 
 /* Defines for SPL */
 #define CONFIG_SPL_FRAMEWORK
-#define CONFIG_SPL_BOARD_INIT
 #define CONFIG_SPL_CONSOLE
 #define CONFIG_SPL_NAND_SIMPLE
 #define CONFIG_SPL_NAND_SOFTECC

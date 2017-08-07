@@ -13,18 +13,16 @@
 #define CONFIG_MAX_RAM_BANK_SIZE	(1024 << 21)	/* 2GB */
 #define CONFIG_SYS_TIMERBASE		0x48040000	/* Use Timer2 */
 
-#include <environment/ti/dfu.h>
 #include <asm/arch/omap.h>
 
 /* NS16550 Configuration */
 #define CONFIG_SYS_NS16550_CLK		48000000
-#if defined(CONFIG_SPL_BUILD) || !defined(CONFIG_DM_SERIAL)
+#if !defined(CONFIG_SPL_DM) || !defined(CONFIG_DM_SERIAL)
+#define CONFIG_SYS_NS16550_REG_SIZE    (-4)
 #define CONFIG_SYS_NS16550_SERIAL
-#define CONFIG_SYS_NS16550_REG_SIZE	(-4)
 #endif
 
 /* I2C Configuration */
-#define CONFIG_CMD_EEPROM
 #define CONFIG_ENV_EEPROM_IS_ON_I2C
 #define CONFIG_SYS_I2C_EEPROM_ADDR	0x50	/* Main EEPROM */
 #define CONFIG_SYS_I2C_EEPROM_ADDR_LEN	2
@@ -77,7 +75,6 @@
 #define FAT_ENV_INTERFACE		"mmc"
 #define FAT_ENV_DEVICE_AND_PART		"0:1"
 #define FAT_ENV_FILE			"uboot.env"
-#define CONFIG_FAT_WRITE
 
 #define CONFIG_SPL_LDSCRIPT		"arch/arm/mach-omap2/u-boot-spl.lds"
 
@@ -111,9 +108,6 @@
  * DM support in SPL
  */
 #ifdef CONFIG_SPL_BUILD
-#undef CONFIG_DM_MMC
-#undef CONFIG_DM_SPI
-#undef CONFIG_DM_SPI_FLASH
 #undef CONFIG_TIMER
 #endif
 
@@ -165,6 +159,9 @@
 #define CONFIG_TI_EDMA3
 
 #ifndef CONFIG_SPL_BUILD
+#include <environment/ti/dfu.h>
+#include <environment/ti/mmc.h>
+
 #define CONFIG_EXTRA_ENV_SETTINGS \
 	DEFAULT_LINUX_BOOT_ENV \
 	DEFAULT_MMC_TI_ARGS \

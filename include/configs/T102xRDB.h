@@ -493,7 +493,6 @@ unsigned long get_board_ddr_clk(void);
 #undef CONFIG_FSL_DIU_FB	/* RDB doesn't support DIU */
 #ifdef CONFIG_FSL_DIU_FB
 #define CONFIG_SYS_DIU_ADDR	(CONFIG_SYS_CCSRBAR + 0x180000)
-#define CONFIG_CMD_BMP
 #define CONFIG_VIDEO_LOGO
 #define CONFIG_VIDEO_BMP_LOGO
 #define CONFIG_CFI_FLASH_USE_WEAK_ACCESSORS
@@ -642,7 +641,6 @@ unsigned long get_board_ddr_clk(void);
 #define CONFIG_HAS_FSL_DR_USB
 
 #ifdef CONFIG_HAS_FSL_DR_USB
-#define CONFIG_USB_EHCI
 #define CONFIG_USB_EHCI_FSL
 #define CONFIG_EHCI_HCD_INIT_AFTER_RESET
 #endif
@@ -791,10 +789,6 @@ unsigned long get_board_ddr_clk(void);
 /*
  * Command line configuration.
  */
-#define CONFIG_CMD_DATE
-#define CONFIG_CMD_EEPROM
-#define CONFIG_CMD_ERRATA
-#define CONFIG_CMD_IRQ
 #define CONFIG_CMD_REGINFO
 
 #ifdef CONFIG_PCI
@@ -836,7 +830,6 @@ unsigned long get_board_ddr_clk(void);
 #define CONFIG_BOOTFILE		"uImage"
 #define CONFIG_UBOOTPATH	u-boot.bin /* U-Boot image on TFTP server */
 #define CONFIG_LOADADDR		1000000 /* default location for tftp, bootm */
-#define CONFIG_BAUDRATE		115200
 #define __USB_PHY_TYPE		utmi
 
 #ifdef CONFIG_ARCH_T1024
@@ -887,12 +880,6 @@ unsigned long get_board_ddr_clk(void);
 	"bootm $loadaddr - $fdtaddr"
 
 #define CONFIG_BOOTCOMMAND	CONFIG_LINUX
-
-/* Hash command with SHA acceleration supported in hardware */
-#ifdef CONFIG_FSL_CAAM
-#define CONFIG_CMD_HASH
-#define CONFIG_SHA_HW_ACCEL
-#endif
 
 #include <asm/fsl_secure_boot.h>
 

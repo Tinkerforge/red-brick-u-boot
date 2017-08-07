@@ -101,7 +101,7 @@ extern unsigned long get_board_sys_clk(unsigned long dummy);
 /*
  * DDR Setup
  */
-#undef CONFIG_FSL_DDR_INTERACTIVE
+#define CONFIG_FSL_DDR_INTERACTIVE
 #define CONFIG_SPD_EEPROM		/* Use SPD EEPROM for DDR setup */
 #define CONFIG_DDR_SPD
 
@@ -649,8 +649,6 @@ extern unsigned long get_board_sys_clk(unsigned long dummy);
 #define CONFIG_LOADADDR		0x10000000
 
 #undef	CONFIG_BOOTARGS		/* the boot command will set bootargs */
-
-#define CONFIG_BAUDRATE	115200
 
 #define	CONFIG_EXTRA_ENV_SETTINGS					\
 	"netdev=eth0\0"							\

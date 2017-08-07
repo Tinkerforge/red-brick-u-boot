@@ -201,7 +201,6 @@ extern unsigned long get_board_ddr_clk(unsigned long dummy);
 #define CONFIG_SYS_NS16550_COM2	(CONFIG_SYS_CCSRBAR+0x4600)
 #define CONFIG_SYS_BAUDRATE_TABLE	\
 	{300, 600, 1200, 2400, 4800, 9600, 19200, 38400, 115200}
-#define CONFIG_BAUDRATE			115200
 #define CONFIG_LOADS_ECHO		1	/* echo on for serial download */
 #define CONFIG_SYS_LOADS_BAUD_CHANGE	1	/* allow baudrate change */
 
@@ -220,8 +219,6 @@ extern unsigned long get_board_ddr_clk(unsigned long dummy);
 #define CONFIG_SYS_FSL_I2C2_OFFSET	0x3100
 
 /* I2C DS7505 temperature sensor */
-#define CONFIG_DTT_LM75
-#define CONFIG_DTT_SENSORS		{ 0 }
 #define CONFIG_SYS_I2C_LM75_ADDR	0x48
 
 /* I2C ADT7461 temperature sensor */
@@ -333,17 +330,12 @@ extern unsigned long get_board_ddr_clk(unsigned long dummy);
 /*
  * USB
  */
-#define CONFIG_USB_EHCI
 #define CONFIG_USB_EHCI_FSL
 #define CONFIG_EHCI_HCD_INIT_AFTER_RESET
 
 /*
  * Command configuration.
  */
-#define CONFIG_CMD_DATE
-#define CONFIG_CMD_DTT
-#define CONFIG_CMD_EEPROM
-#define CONFIG_CMD_JFFS2
 #define CONFIG_CMD_NAND
 #define CONFIG_CMD_PCA953X
 #define CONFIG_CMD_PCA953X_INFO

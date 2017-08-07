@@ -25,7 +25,6 @@ obj-$(CONFIG_MXC_OCOTP) += mxc_ocotp.o
 obj-$(CONFIG_MXS_OCOTP) += mxs_ocotp.o
 obj-$(CONFIG_NUVOTON_NCT6102D) += nuvoton_nct6102d.o
 obj-$(CONFIG_NS87308) += ns87308.o
-obj-$(CONFIG_PDSP188x) += pdsp188x.o
 obj-$(CONFIG_$(SPL_)PWRSEQ) += pwrseq-uclass.o
 ifdef CONFIG_DM_I2C
 ifndef CONFIG_SPL_BUILD
@@ -51,3 +50,4 @@ obj-$(CONFIG_PCA9551_LED) += pca9551_led.o
 obj-$(CONFIG_FSL_DEVICE_DISABLE) += fsl_devdis.o
 obj-$(CONFIG_WINBOND_W83627) += winbond_w83627.o
 obj-$(CONFIG_QFW) += qfw.o
+obj-$(CONFIG_ROCKCHIP_EFUSE) += rockchip-efuse.o

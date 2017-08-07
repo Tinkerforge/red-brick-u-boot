@@ -45,7 +45,6 @@
 #define CONFIG_FEC_MXC_PHYADDR	0x1F
 
 /* USB Configs */
-#define CONFIG_USB_EHCI
 #define CONFIG_USB_EHCI_MX5
 #define CONFIG_USB_STORAGE
 #define CONFIG_USB_HOST_ETHER
@@ -59,7 +58,6 @@
 /* allow to overwrite serial and ethaddr */
 #define CONFIG_ENV_OVERWRITE
 #define CONFIG_CONS_INDEX		1
-#define CONFIG_BAUDRATE			115200
 
 /* Command definition */
 #define CONFIG_SUPPORT_RAW_INITRD

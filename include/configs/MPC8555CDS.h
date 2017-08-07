@@ -340,7 +340,6 @@ extern unsigned long get_clock_freq(void);
 /*
  * Command line configuration.
  */
-#define CONFIG_CMD_IRQ
 #define CONFIG_CMD_REGINFO
 
 #if defined(CONFIG_PCI)
@@ -399,8 +398,6 @@ extern unsigned long get_clock_freq(void);
 #define CONFIG_LOADADDR  200000   /*default location for tftp and bootm*/
 
 #undef  CONFIG_BOOTARGS           /* the boot command will set bootargs*/
-
-#define CONFIG_BAUDRATE	115200
 
 #define	CONFIG_EXTRA_ENV_SETTINGS				        \
    "netdev=eth0\0"                                                      \

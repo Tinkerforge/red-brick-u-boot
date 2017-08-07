@@ -37,11 +37,6 @@
 #endif
 #endif
 
-/* GPIO banks */
-#define CONFIG_OMAP3_GPIO_3		/* GPIO64 .. 95 is in GPIO bank 3 */
-#define CONFIG_OMAP3_GPIO_5		/* GPIO128..159 is in GPIO bank 5 */
-#define CONFIG_OMAP3_GPIO_6		/* GPIO160..191 is in GPIO bank 6 */
-
 /* USB */
 #define CONFIG_USB_MUSB_UDC		1
 #define CONFIG_USB_OMAP3		1
@@ -140,7 +135,7 @@
 #define CONFIG_SPL_UBI_INFO_ADDR	0x88080000
 
 /* environment organization */
-#define CONFIG_ENV_IS_IN_UBI		1
+#define CONFIG_ENV_IS_NOWHERE		1
 #define CONFIG_ENV_UBI_PART		"UBI"
 #define CONFIG_ENV_UBI_VOLUME		"config"
 #define CONFIG_ENV_UBI_VOLUME_REDUND	"config_r"

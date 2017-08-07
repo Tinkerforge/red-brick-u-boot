@@ -50,8 +50,22 @@
 
 DECLARE_GLOBAL_DATA_PTR;
 
+#define GPIO_ETH_LCD		GPIO_TO_PIN(2, 22)
 /* GPIO 7_11 */
 #define GPIO_DDR_VTT_EN 203
+
+/* Touch screen controller to identify the LCD */
+#define OSD_TS_FT_BUS_ADDRESS	0
+#define OSD_TS_FT_CHIP_ADDRESS	0x38
+#define OSD_TS_FT_REG_ID	0xA3
+/*
+ * Touchscreen IDs for various OSD panels
+ * Ref: http://www.osddisplays.com/TI/OSD101T2587-53TS_A.1.pdf
+ */
+/* Used on newer osd101t2587 Panels */
+#define OSD_TS_FT_ID_5x46	0x54
+/* Used on older osd101t2045 Panels */
+#define OSD_TS_FT_ID_5606	0x08
 
 #define SYSINFO_BOARD_NAME_MAX_LEN	45
 
@@ -329,6 +343,54 @@ struct vcores_data am572x_idk_volts = {
 	.iva.abb_tx_done_mask	= OMAP_ABB_IVA_TXDONE_MASK,
 };
 
+struct vcores_data am571x_idk_volts = {
+	.mpu.value[OPP_NOM]	= VDD_MPU_DRA7_NOM,
+	.mpu.efuse.reg[OPP_NOM]	= STD_FUSE_OPP_VMIN_MPU_NOM,
+	.mpu.efuse.reg_bits     = DRA752_EFUSE_REGBITS,
+	.mpu.addr		= TPS659038_REG_ADDR_SMPS12,
+	.mpu.pmic		= &tps659038,
+	.mpu.abb_tx_done_mask = OMAP_ABB_MPU_TXDONE_MASK,
+
+	.eve.value[OPP_NOM]	= VDD_EVE_DRA7_NOM,
+	.eve.value[OPP_OD]	= VDD_EVE_DRA7_OD,
+	.eve.value[OPP_HIGH]	= VDD_EVE_DRA7_HIGH,
+	.eve.efuse.reg[OPP_NOM]	= STD_FUSE_OPP_VMIN_DSPEVE_NOM,
+	.eve.efuse.reg[OPP_OD]	= STD_FUSE_OPP_VMIN_DSPEVE_OD,
+	.eve.efuse.reg[OPP_HIGH]	= STD_FUSE_OPP_VMIN_DSPEVE_HIGH,
+	.eve.efuse.reg_bits	= DRA752_EFUSE_REGBITS,
+	.eve.addr		= TPS659038_REG_ADDR_SMPS45,
+	.eve.pmic		= &tps659038,
+	.eve.abb_tx_done_mask	= OMAP_ABB_EVE_TXDONE_MASK,
+
+	.gpu.value[OPP_NOM]	= VDD_GPU_DRA7_NOM,
+	.gpu.value[OPP_OD]	= VDD_GPU_DRA7_OD,
+	.gpu.value[OPP_HIGH]	= VDD_GPU_DRA7_HIGH,
+	.gpu.efuse.reg[OPP_NOM]	= STD_FUSE_OPP_VMIN_GPU_NOM,
+	.gpu.efuse.reg[OPP_OD]	= STD_FUSE_OPP_VMIN_GPU_OD,
+	.gpu.efuse.reg[OPP_HIGH]	= STD_FUSE_OPP_VMIN_GPU_HIGH,
+	.gpu.efuse.reg_bits	= DRA752_EFUSE_REGBITS,
+	.gpu.addr		= TPS659038_REG_ADDR_SMPS6,
+	.gpu.pmic		= &tps659038,
+	.gpu.abb_tx_done_mask	= OMAP_ABB_GPU_TXDONE_MASK,
+
+	.core.value[OPP_NOM]	= VDD_CORE_DRA7_NOM,
+	.core.efuse.reg[OPP_NOM]	= STD_FUSE_OPP_VMIN_CORE_NOM,
+	.core.efuse.reg_bits	= DRA752_EFUSE_REGBITS,
+	.core.addr		= TPS659038_REG_ADDR_SMPS7,
+	.core.pmic		= &tps659038,
+
+	.iva.value[OPP_NOM]	= VDD_IVA_DRA7_NOM,
+	.iva.value[OPP_OD]	= VDD_IVA_DRA7_OD,
+	.iva.value[OPP_HIGH]	= VDD_IVA_DRA7_HIGH,
+	.iva.efuse.reg[OPP_NOM]	= STD_FUSE_OPP_VMIN_IVA_NOM,
+	.iva.efuse.reg[OPP_OD]	= STD_FUSE_OPP_VMIN_IVA_OD,
+	.iva.efuse.reg[OPP_HIGH]	= STD_FUSE_OPP_VMIN_IVA_HIGH,
+	.iva.efuse.reg_bits	= DRA752_EFUSE_REGBITS,
+	.iva.addr		= TPS659038_REG_ADDR_SMPS45,
+	.iva.pmic		= &tps659038,
+	.iva.abb_tx_done_mask	= OMAP_ABB_IVA_TXDONE_MASK,
+};
+
 int get_voltrail_opp(int rail_offset)
 {
 	int opp;
@@ -438,6 +500,8 @@ void vcores_init(void)
 {
 	if (board_is_am572x_idk())
 		*omap_vcores = &am572x_idk_volts;
+	else if (board_is_am571x_idk())
+		*omap_vcores = &am571x_idk_volts;
 	else
 		*omap_vcores = &beagle_x15_volts;
 }
@@ -449,12 +513,83 @@ void hw_data_init(void)
 	*ctrl = &dra7xx_ctrl;
 }
 
+bool am571x_idk_needs_lcd(void)
+{
+	bool needs_lcd;
+
+	gpio_request(GPIO_ETH_LCD, "nLCD_Detect");
+	if (gpio_get_value(GPIO_ETH_LCD))
+		needs_lcd = false;
+	else
+		needs_lcd = true;
+
+	gpio_free(GPIO_ETH_LCD);
+
+	return needs_lcd;
+}
+
 int board_init(void)
 {
 	gpmc_init();
 	gd->bd->bi_boot_params = (CONFIG_SYS_SDRAM_BASE + 0x100);
 
 	return 0;
+}
+
+void am57x_idk_lcd_detect(void)
+{
+	int r = -ENODEV;
+	char *idk_lcd = "no";
+	uint8_t buf = 0;
+
+	/* Only valid for IDKs */
+	if (board_is_x15() || board_is_am572x_evm())
+		return;
+
+	/* Only AM571x IDK has gpio control detect.. so check that */
+	if (board_is_am571x_idk() && !am571x_idk_needs_lcd())
+		goto out;
+
+	r = i2c_set_bus_num(OSD_TS_FT_BUS_ADDRESS);
+	if (r) {
+		printf("%s: Failed to set bus address to %d: %d\n",
+		       __func__, OSD_TS_FT_BUS_ADDRESS, r);
+		goto out;
+	}
+	r = i2c_probe(OSD_TS_FT_CHIP_ADDRESS);
+	if (r) {
+		/* AM572x IDK has no explicit settings for optional LCD kit */
+		if (board_is_am571x_idk()) {
+			printf("%s: Touch screen detect failed: %d!\n",
+			       __func__, r);
+		}
+		goto out;
+	}
+
+	/* Read FT ID */
+	r = i2c_read(OSD_TS_FT_CHIP_ADDRESS, OSD_TS_FT_REG_ID, 1, &buf, 1);
+	if (r) {
+		printf("%s: Touch screen ID read %d:0x%02x[0x%02x] failed:%d\n",
+		       __func__, OSD_TS_FT_BUS_ADDRESS, OSD_TS_FT_CHIP_ADDRESS,
+		       OSD_TS_FT_REG_ID, r);
+		goto out;
+	}
+
+	switch (buf) {
+	case OSD_TS_FT_ID_5606:
+		idk_lcd = "osd101t2045";
+		break;
+	case OSD_TS_FT_ID_5x46:
+		idk_lcd = "osd101t2587";
+		break;
+	default:
+		printf("%s: Unidentifed Touch screen ID 0x%02x\n",
+		       __func__, buf);
+		/* we will let default be "no lcd" */
+	}
+out:
+	setenv("idk_lcd", idk_lcd);
+	return;
 }
 
 int board_late_init(void)
@@ -488,6 +623,13 @@ int board_late_init(void)
 			    val);
 
 	omap_die_id_serial();
+	omap_set_fastboot_vars();
+
+	am57x_idk_lcd_detect();
+
+#if !defined(CONFIG_SPL_BUILD)
+	board_ti_set_ethaddr(2);
+#endif
 
 	return 0;
 }
@@ -502,8 +644,8 @@ void set_muxconf_regs(void)
 void recalibrate_iodelay(void)
 {
 	const struct pad_conf_entry *pconf;
-	const struct iodelay_cfg_entry *iod;
-	int pconf_sz, iod_sz;
+	const struct iodelay_cfg_entry *iod, *delta_iod;
+	int pconf_sz, iod_sz, delta_iod_sz = 0;
 	int ret;
 
 	if (board_is_am572x_idk()) {
@@ -551,15 +693,33 @@ void recalibrate_iodelay(void)
 		do_set_mux32((*ctrl)->control_padconf_core_base, pconf, pconf_sz);
 	}
 
+	if (board_is_am571x_idk()) {
+		if (am571x_idk_needs_lcd()) {
+			pconf = core_padconf_array_vout_am571x_idk;
+			pconf_sz = ARRAY_SIZE(core_padconf_array_vout_am571x_idk);
+			delta_iod = iodelay_cfg_array_am571x_idk_4port;
+			delta_iod_sz = ARRAY_SIZE(iodelay_cfg_array_am571x_idk_4port);
+
+		} else {
+			pconf = core_padconf_array_icss1eth_am571x_idk;
+			pconf_sz = ARRAY_SIZE(core_padconf_array_icss1eth_am571x_idk);
+		}
+		do_set_mux32((*ctrl)->control_padconf_core_base, pconf, pconf_sz);
+	}
+
 	/* Setup IOdelay configuration */
 	ret = do_set_iodelay((*ctrl)->iodelay_config_base, iod, iod_sz);
+	if (delta_iod_sz)
+		ret = do_set_iodelay((*ctrl)->iodelay_config_base, delta_iod,
+				     delta_iod_sz);
+
 err:
 	/* Closeup.. remove isolation */
 	__recalibrate_iodelay_end(ret);
 }
 #endif
 
-#if !defined(CONFIG_SPL_BUILD) && defined(CONFIG_GENERIC_MMC)
+#if defined(CONFIG_MMC)
 int board_mmc_init(bd_t *bis)
 {
 	omap_mmc_init(0, 0, 0, -1, -1);
@@ -618,7 +778,7 @@ int usb_gadget_handle_interrupts(int index)
 #endif /* CONFIG_USB_DWC3 */
 
 #if defined(CONFIG_USB_DWC3) || defined(CONFIG_USB_XHCI_OMAP)
-int board_usb_init(int index, enum usb_init_type init)
+int omap_xhci_board_usb_init(int index, enum usb_init_type init)
 {
 	enable_usb_clocks(index);
 	switch (index) {
@@ -652,7 +812,7 @@ int board_usb_init(int index, enum usb_init_type init)
 	return 0;
 }
 
-int board_usb_cleanup(int index, enum usb_init_type init)
+int omap_xhci_board_usb_cleanup(int index, enum usb_init_type init)
 {
 #ifdef CONFIG_USB_DWC3
 	switch (index) {

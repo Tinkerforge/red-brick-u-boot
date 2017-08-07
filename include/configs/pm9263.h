@@ -165,7 +165,6 @@
 #undef LCD_TEST_PATTERN
 #define CONFIG_LCD_INFO			1
 #define CONFIG_LCD_INFO_BELOW_LOGO	1
-#define CONFIG_SYS_WHITE_ON_BLACK	1
 #define CONFIG_ATMEL_LCD		1
 #define CONFIG_ATMEL_LCD_BGR555		1
 
@@ -227,7 +226,6 @@
 
 #endif
 
-#define CONFIG_CMD_JFFS2		1
 #define CONFIG_JFFS2_CMDLINE		1
 #define CONFIG_JFFS2_NAND		1
 #define CONFIG_JFFS2_DEV		"nand0" /* NAND device jffs2 lives on */
@@ -352,8 +350,6 @@
 #else
 #error "Undefined memory device"
 #endif
-
-#define CONFIG_BAUDRATE			115200
 
 #define CONFIG_SYS_CBSIZE		256
 #define CONFIG_SYS_MAXARGS		16

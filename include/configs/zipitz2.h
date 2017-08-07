@@ -42,7 +42,6 @@
 #define	CONFIG_CMDLINE_TAG
 #define	CONFIG_SETUP_MEMORY_TAGS
 #define	CONFIG_SYS_TEXT_BASE		0x0
-#define	CONFIG_LZMA			/* LZMA compression support */
 
 /*
  * Serial Console Configuration
@@ -50,12 +49,10 @@
  */
 #define	CONFIG_STUART			1
 #define CONFIG_CONS_INDEX		2
-#define	CONFIG_BAUDRATE			115200
 
 /*
  * Bootloader Components Configuration
  */
-#define	CONFIG_CMD_ENV
 
 /*
  * MMC Card Configuration

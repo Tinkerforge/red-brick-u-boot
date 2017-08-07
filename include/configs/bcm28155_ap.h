@@ -24,7 +24,6 @@
 #define CONFIG_NR_DRAM_BANKS		1
 
 #define CONFIG_SYS_MALLOC_LEN		SZ_4M	/* see armv7/start.S. */
-#define CONFIG_STACKSIZE		SZ_256K
 
 /* GPIO Driver */
 #define CONFIG_KONA_GPIO
@@ -80,8 +79,6 @@
 #define CONFIG_CONS_INDEX		1
 #define CONFIG_SYS_NS16550_COM1		0x3e000000
 
-#define CONFIG_BAUDRATE			115200
-
 /* must fit into GPT:u-boot-env partition */
 #define CONFIG_ENV_IS_IN_MMC
 #define CONFIG_SYS_MMC_ENV_DEV		0
@@ -106,14 +103,10 @@
 #define CONFIG_CMDLINE_EDITING
 #define CONFIG_SYS_LONGHELP
 
-#define CONFIG_CRC32_VERIFY
 #define CONFIG_MX_CYCLIC
 
 /* Initial upstream - boot to cmd prompt only */
 #define CONFIG_BOOTCOMMAND		""
-
-/* Commands */
-#define CONFIG_FAT_WRITE
 
 #define CONFIG_USBID_ADDR		0x34052c46
 
