@@ -35,7 +35,7 @@
 #include <sy8106a.h>
 #include <asm/setup.h>
 
-#ifdef RED_BRICK
+#ifdef CONFIG_RED_BRICK
 #include <led.h>
 
 static void setup_red_brick_leds(void)
@@ -260,7 +260,7 @@ int board_init(void)
 	i2c_init_board();
 #endif
 
-#ifdef RED_BRICK
+#ifdef CONFIG_RED_BRICK
 	setup_red_brick_leds();
 #endif
 

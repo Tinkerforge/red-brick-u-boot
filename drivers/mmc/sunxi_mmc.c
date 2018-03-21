@@ -437,7 +437,7 @@ out:
 
 static int sunxi_mmc_getcd(struct mmc *mmc)
 {
-	#ifdef RED_BRICK
+	#ifdef CONFIG_RED_BRICK
 		return 1;
 	#endif
 

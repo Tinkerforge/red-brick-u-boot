@@ -1,6 +1,12 @@
 menu "ARM architecture"
 	depends on ARM
 
+config RED_BRICK
+	bool "Support for Tinkerforge GmbH RED Brick"
+	depends on ARCH_SUNXI && MACH_SUN5I
+	help
+	  Say Y here if you want to enable support for the RED Brick.
+
 config SYS_ARCH
 	default "arm"
 

@@ -250,22 +250,11 @@ extern int soft_i2c_gpio_scl;
     defined CONFIG_SY8106A_POWER
 #endif
 
-#ifndef RED_BRICK
-#define RED_BRICK
-#endif
-
-#ifdef RED_BRICK
-#define CONFIG_CONS_INDEX              4       /* UART3 */
-#else
 #ifndef CONFIG_CONS_INDEX
 #define CONFIG_CONS_INDEX              1       /* UART0 */
 #endif
-#endif
 
 #ifdef CONFIG_REQUIRE_SERIAL_CONSOLE
-#ifdef RED_BRICK
-#define OF_STDOUT_PATH		"/soc@01c00000/serial@01c28c00:115200"
-#else
 #if CONFIG_CONS_INDEX == 1
 #ifdef CONFIG_MACH_SUN9I
 #define OF_STDOUT_PATH		"/soc/serial@07000000:115200"
@@ -274,13 +263,14 @@ extern int soft_i2c_gpio_scl;
 #endif
 #elif CONFIG_CONS_INDEX == 2 && defined(CONFIG_MACH_SUN5I)
 #define OF_STDOUT_PATH		"/soc@01c00000/serial@01c28400:115200"
+#elif CONFIG_CONS_INDEX == 4 && defined(CONFIG_MACH_SUN5I)
+#define OF_STDOUT_PATH		"/soc@01c00000/serial@01c28c00:115200"
 #elif CONFIG_CONS_INDEX == 3 && defined(CONFIG_MACH_SUN8I)
 #define OF_STDOUT_PATH		"/soc@01c00000/serial@01c28800:115200"
 #elif CONFIG_CONS_INDEX == 5 && defined(CONFIG_MACH_SUN8I)
 #define OF_STDOUT_PATH		"/soc@01c00000/serial@01f02800:115200"
 #else
 #error Unsupported console port nr. Please fix stdout-path in sunxi-common.h.
-#endif
 #endif
 #endif /* ifdef CONFIG_REQUIRE_SERIAL_CONSOLE */
 
